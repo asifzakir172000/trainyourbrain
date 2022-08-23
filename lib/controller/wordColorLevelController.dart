@@ -1,11 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:lottie/lottie.dart';
+import 'package:trainyourbrain/helper/audioPlayer.dart';
 import 'package:trainyourbrain/helper/image.dart';
 import 'package:trainyourbrain/helper/storageKey.dart';
 import 'package:video_player/video_player.dart';
 
-class WordColorLevelController extends GetxController{
+class WordColorLevelController extends SuperController{
 
   var level = 0.obs;
 
@@ -122,6 +123,26 @@ class WordColorLevelController extends GetxController{
   void onInit() {
     getData();
     super.onInit();
+  }
+
+  @override
+  void onDetached() {
+
+  }
+
+  @override
+  void onInactive() {
+
+  }
+
+  @override
+  void onPaused() {
+    AudioPlayerClass.instance.dismissBgPlayer();
+  }
+
+  @override
+  void onResumed() {
+    AudioPlayerClass.instance.restartBg();
   }
 
 }

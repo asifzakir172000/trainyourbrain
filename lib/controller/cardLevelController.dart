@@ -1,11 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:lottie/lottie.dart';
+import 'package:trainyourbrain/helper/audioPlayer.dart';
 import 'package:trainyourbrain/helper/image.dart';
 import 'package:trainyourbrain/helper/storageKey.dart';
 import 'package:trainyourbrain/helper/utils.dart';
 
-class CardLevelController extends GetxController{
+class CardLevelController extends SuperController{
 
   var level = 0.obs;
 
@@ -124,6 +125,26 @@ class CardLevelController extends GetxController{
   void onInit() {
     getLevel();
     super.onInit();
+  }
+
+  @override
+  void onDetached() {
+
+  }
+
+  @override
+  void onInactive() {
+
+  }
+
+  @override
+  void onPaused() {
+    AudioPlayerClass.instance.dismissBgPlayer();
+  }
+
+  @override
+  void onResumed() {
+    AudioPlayerClass.instance.restartBg();
   }
 
 

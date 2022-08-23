@@ -1,11 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:trainyourbrain/helper/audioPlayer.dart';
 import 'package:trainyourbrain/helper/storageKey.dart';
 import 'package:video_player/video_player.dart';
 import 'package:lottie/lottie.dart';
 import 'package:trainyourbrain/helper/image.dart';
 
-class FindPathLevelController extends GetxController{
+class FindPathLevelController extends SuperController{
 
   var level = 0.obs;
 
@@ -120,6 +121,26 @@ class FindPathLevelController extends GetxController{
   void onInit() {
     getLevel();
     super.onInit();
+  }
+
+  @override
+  void onDetached() {
+
+  }
+
+  @override
+  void onInactive() {
+
+  }
+
+  @override
+  void onPaused() {
+    AudioPlayerClass.instance.dismissBgPlayer();
+  }
+
+  @override
+  void onResumed() {
+    AudioPlayerClass.instance.restartBg();
   }
 
 }

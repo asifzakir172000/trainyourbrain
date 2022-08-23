@@ -6,11 +6,11 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:trainyourbrain/controller/findNewLevelController.dart';
 import 'package:trainyourbrain/controller/homeController.dart';
+import 'package:trainyourbrain/helper/audioPlayer.dart';
 import 'package:trainyourbrain/helper/storageKey.dart';
-import 'package:trainyourbrain/view/card/cardData.dart';
 import 'package:trainyourbrain/view/findNew/findNewData.dart';
 
-class FindNewController extends GetxController{
+class FindNewController extends SuperController{
 
   var start = false.obs;
   // var wait = false.obs;
@@ -112,6 +112,26 @@ class FindNewController extends GetxController{
   void dispose() {
     timer!.cancel();
     super.dispose();
+  }
+
+  @override
+  void onDetached() {
+
+  }
+
+  @override
+  void onInactive() {
+
+  }
+
+  @override
+  void onPaused() {
+    AudioPlayerClass.instance.dismissBgPlayer();
+  }
+
+  @override
+  void onResumed() {
+    AudioPlayerClass.instance.restartBg();
   }
 
 }

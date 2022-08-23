@@ -5,7 +5,7 @@ import 'package:trainyourbrain/helper/image.dart';
 import 'package:trainyourbrain/helper/storageKey.dart';
 import 'package:trainyourbrain/view/home.dart';
 
-class SplashScreenController extends GetxController{
+class SplashScreenController extends SuperController{
 
   splashSetup(){
     AudioPlayerClass.instance.playBg(bgAudio);
@@ -18,6 +18,26 @@ class SplashScreenController extends GetxController{
   void onInit() {
     splashSetup();
     super.onInit();
+  }
+
+  @override
+  void onDetached() {
+
+  }
+
+  @override
+  void onInactive() {
+
+  }
+
+  @override
+  void onPaused() {
+    AudioPlayerClass.instance.dismissBgPlayer();
+  }
+
+  @override
+  void onResumed() {
+    AudioPlayerClass.instance.restartBg();
   }
 
 }

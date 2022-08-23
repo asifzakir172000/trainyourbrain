@@ -4,13 +4,13 @@ import 'dart:async';
 import 'package:flip_card/flip_card.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:get_storage/get_storage.dart';
 import 'package:trainyourbrain/controller/cardLevelController.dart';
 import 'package:trainyourbrain/controller/homeController.dart';
+import 'package:trainyourbrain/helper/audioPlayer.dart';
 import 'package:trainyourbrain/helper/storageKey.dart';
 import 'package:trainyourbrain/view/card/cardData.dart';
 
-class CardFlipController extends GetxController{
+class CardFlipController extends SuperController{
   var previousIndex = -1.obs;
   var flip = false.obs;
   var start = false.obs;
@@ -126,6 +126,26 @@ class CardFlipController extends GetxController{
   void dispose() {
     timer!.cancel();
     super.dispose();
+  }
+
+  @override
+  void onDetached() {
+
+  }
+
+  @override
+  void onInactive() {
+
+  }
+
+  @override
+  void onPaused() {
+    AudioPlayerClass.instance.dismissBgPlayer();
+  }
+
+  @override
+  void onResumed() {
+    AudioPlayerClass.instance.restartBg();
   }
 
 }

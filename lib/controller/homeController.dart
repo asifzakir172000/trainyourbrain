@@ -1,8 +1,9 @@
 
 import 'package:get/get.dart';
+import 'package:trainyourbrain/helper/audioPlayer.dart';
 import 'package:trainyourbrain/helper/storageKey.dart';
 
-class HomeController extends GetxController{
+class HomeController extends SuperController{
 
   var reasoningPer = 0.0.obs;
   var attentionPer = 0.0.obs;
@@ -18,12 +19,30 @@ class HomeController extends GetxController{
     return completeLevel / totalLevel;
   }
 
-
-
   @override
   void onInit() {
     setData();
     super.onInit();
+  }
+
+  @override
+  void onDetached() {
+
+  }
+
+  @override
+  void onInactive() {
+
+  }
+
+  @override
+  void onPaused() {
+    AudioPlayerClass.instance.dismissBgPlayer();
+  }
+
+  @override
+  void onResumed() {
+    AudioPlayerClass.instance.restartBg();
   }
 
 }

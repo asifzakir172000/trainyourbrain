@@ -13,21 +13,9 @@ class MazeGame extends StatefulWidget {
   State<MazeGame> createState() => _MazeGameState();
 }
 
-class _MazeGameState extends State<MazeGame> with WidgetsBindingObserver {
+class _MazeGameState extends State<MazeGame>{
 
   MazeController mController = Get.put(MazeController());
-
-  @override
-  void didChangeAppLifecycleState(AppLifecycleState state) {
-    if(state == AppLifecycleState.paused){
-      print("p$state");
-      AudioPlayerClass.instance.dismissBgPlayer();
-    }
-    if(state == AppLifecycleState.resumed){
-      AudioPlayerClass.instance.restartBg();
-    }
-    super.didChangeAppLifecycleState(state);
-  }
 
   @override
   Widget build(BuildContext context) {

@@ -3,13 +3,13 @@ import 'dart:math';
 
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:get_storage/get_storage.dart';
 import 'package:trainyourbrain/controller/findPathLevelController.dart';
 import 'package:trainyourbrain/controller/homeController.dart';
+import 'package:trainyourbrain/helper/audioPlayer.dart';
 import 'package:trainyourbrain/helper/storageKey.dart';
 import 'package:trainyourbrain/view/maza/mazeData.dart';
 
-class MazeController extends GetxController{
+class MazeController extends SuperController{
 
   var rows = 12.obs;
   var columns = 3.obs;
@@ -58,6 +58,26 @@ class MazeController extends GetxController{
     columns.value = Get.arguments["columns"]??12;
     level.value = Get.arguments["level"]??0;
     super.onInit();
+  }
+
+  @override
+  void onDetached() {
+
+  }
+
+  @override
+  void onInactive() {
+
+  }
+
+  @override
+  void onPaused() {
+    AudioPlayerClass.instance.dismissBgPlayer();
+  }
+
+  @override
+  void onResumed() {
+    AudioPlayerClass.instance.restartBg();
   }
 
 }

@@ -3,12 +3,13 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:trainyourbrain/controller/homeController.dart';
 import 'package:trainyourbrain/controller/wordColorLevelController.dart';
+import 'package:trainyourbrain/helper/audioPlayer.dart';
 import 'package:trainyourbrain/helper/storageKey.dart';
 import 'package:trainyourbrain/model/wordCOlorModel.dart';
 import 'package:trainyourbrain/model/wordColorOptionalModel.dart';
 import 'package:trainyourbrain/view/wordColor/wordColorData.dart';
 
-class WordColorController extends GetxController{
+class WordColorController extends SuperController{
 
   var questionText = "".obs;
   var answer = "".obs;
@@ -99,4 +100,23 @@ class WordColorController extends GetxController{
     super.onInit();
   }
 
+  @override
+  void onDetached() {
+
+  }
+
+  @override
+  void onInactive() {
+
+  }
+
+  @override
+  void onPaused() {
+    AudioPlayerClass.instance.dismissBgPlayer();
+  }
+
+  @override
+  void onResumed() {
+    AudioPlayerClass.instance.restartBg();
+  }
 }
