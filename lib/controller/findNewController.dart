@@ -65,29 +65,25 @@ class FindNewController extends GetxController{
   }
 
   onNewItemCheck(index){
-    debugPrint("numfrom ${showData[index]}");
-    debugPrint("numfrom ${data.contains(showData[index])}");
     if(!data.contains(showData[index]) && !answerData.contains(showData[index])){
-      debugPrint("numfrom $answerData");
       answerData.add(showData[index]);
-      debugPrint("numfrom $answerData");
       isSelected[index] = true;
     }
     if(answerData.length == showCardLen){
-      debugPrint("fs ${level.value}");
       var levelP = StorageKey.instance.getStorage(key: StorageKey.findNew)??0;
       if(levelP < level.value){
-        debugPrint("fss $levelP");
         StorageKey.instance.setStorage(key: StorageKey.findNew, msg: level.value);
         var per = StorageKey.instance.getStorage(key: StorageKey.reasoningPer)??0.0;
         StorageKey.instance.setStorage(key: StorageKey.reasoningPer, msg: per + 1);
         Get.find<FindNewLevelController>().getLevel();
         Get.find<HomeController>().setData();
       }
-      isFinished.value = true;
-      if(level.value == 5){
-        isComplete.value = true;
-      }
+     Future.delayed(const Duration(milliseconds: 500), (){
+       isFinished.value = true;
+       if(level.value == 5){
+         isComplete.value = true;
+       }
+     });
     }
   }
 
@@ -101,6 +97,7 @@ class FindNewController extends GetxController{
     level.value = levelC + 1;
     restartGame();
   }
+
 
   @override
   void onInit() {

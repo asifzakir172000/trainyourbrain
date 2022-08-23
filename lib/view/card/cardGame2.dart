@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:lottie/lottie.dart';
 import 'package:trainyourbrain/controller/cardFlipController.dart';
+import 'package:trainyourbrain/helper/audioPlayer.dart';
 import 'package:trainyourbrain/helper/image.dart';
 
 class FlipCardTwoScreen extends StatefulWidget {
@@ -31,7 +32,15 @@ class _FlipCardScreenState extends State<FlipCardTwoScreen> {
           ],
           borderRadius: BorderRadius.circular(5)),
       margin: const EdgeInsets.all(4.0),
-      child: Image.asset(mController.data[index]),
+      child: Stack(
+        children: [
+          Padding(
+            padding: const EdgeInsets.all(10.0),
+            child: Image.asset(mController.data[index]),
+          ),
+          Obx(() => Visibility(visible: !mController.cardFlips[index], child: Image.asset(checkMarkImage),),)
+        ],
+      ),
     );
   }
 
@@ -74,6 +83,7 @@ class _FlipCardScreenState extends State<FlipCardTwoScreen> {
                         color: Colors.amber.shade300,
                         borderRadius: BorderRadius.circular(13),
                       ),
+                      margin: const EdgeInsets.only(right: 30, left: 30),
                       child: const Icon(Icons.replay, color: Colors.white, size: 28,),
                     ),
                   ) :  Row(
@@ -128,6 +138,7 @@ class _FlipCardScreenState extends State<FlipCardTwoScreen> {
                   children: [
                     GestureDetector(
                       onTap: (){
+                        AudioPlayerClass.instance.play(beepAudio);
                         Get.back();
                       },
                       child: Container(
@@ -145,7 +156,7 @@ class _FlipCardScreenState extends State<FlipCardTwoScreen> {
                                   spreadRadius: 0.5),
                             ]
                         ),
-                        child: Icon(Icons.grid_view_rounded, color: Colors.amber,),
+                        child: const Icon(Icons.grid_view_rounded, color: Colors.amber,),
                       ),
                     ),
                     Padding(
@@ -202,7 +213,7 @@ class _FlipCardScreenState extends State<FlipCardTwoScreen> {
                           onFlip: () {
                             mController.onFlip(index);
                           },
-                          speed: 250,
+                          speed: 100,
                           flipOnTouch: mController.wait.value ? false : mController.cardFlips[index],
                           direction: FlipDirection.HORIZONTAL,
                           front: Container(
@@ -222,6 +233,7 @@ class _FlipCardScreenState extends State<FlipCardTwoScreen> {
                               padding: const EdgeInsets.all(8.0),
                               child: Image.asset(
                                 questionMarkImage,
+                                fit: BoxFit.fill,
                               ),
                             ),
                           ),

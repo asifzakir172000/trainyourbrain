@@ -5,8 +5,6 @@ import 'package:get/get.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:percent_indicator/linear_percent_indicator.dart';
 import 'package:trainyourbrain/controller/homeController.dart';
-import 'package:trainyourbrain/helper/audioPlayer.dart';
-import 'package:trainyourbrain/helper/image.dart';
 import 'package:trainyourbrain/model/homeData.dart';
 
 class HomePage extends StatefulWidget {
@@ -29,17 +27,14 @@ class _HomePageState extends State<HomePage> {
         shape: const RoundedRectangleBorder(
           borderRadius: BorderRadius.all(Radius.circular(10.0)),
         ),
-        child: Image.asset(image, fit: BoxFit.fill,),
+        child: Padding(
+          padding: const EdgeInsets.all(10.0),
+          child: Image.asset(image, fit: BoxFit.fill,),
+        ),
       ),
     );
   }
 
-
-  @override
-  void initState() {
-    AudioPlayerClass.instance.playBg(bgAudio);
-    super.initState();
-  }
 
 
   @override

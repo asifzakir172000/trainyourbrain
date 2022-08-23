@@ -56,21 +56,17 @@ class CardFlipController extends GetxController{
   }
 
   onFlip(index){
-    debugPrint("onflip, ${flip.value}");
     if (!flip.value) {
       flip.value = true;
       previousIndex= index;
     } else {
       flip.value = false;
-      debugPrint(
-          "onflip1, ${flip.value}, index ($previousIndex , $index)");
       if (previousIndex != index) {
         if (data[previousIndex] !=
             data[index]) {
           wait.value = true;
-
           Future.delayed(
-              const Duration(milliseconds: 1500),
+              const Duration(milliseconds: 200),
                   () {
                 cardStateKeys[previousIndex]
                     .currentState!
@@ -83,7 +79,7 @@ class CardFlipController extends GetxController{
                     .toggleCard();
 
                 Future.delayed(
-                    const Duration(milliseconds: 160),
+                    const Duration(milliseconds: 300),
                         () {
                           wait.value = false;
                     });

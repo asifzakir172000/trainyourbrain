@@ -3,6 +3,7 @@ import 'package:get/get.dart';
 import 'package:lottie/lottie.dart';
 import 'package:maze/maze.dart';
 import 'package:trainyourbrain/controller/mazeController.dart';
+import 'package:trainyourbrain/helper/audioPlayer.dart';
 import 'package:trainyourbrain/helper/image.dart';
 
 class MazeGame extends StatefulWidget {
@@ -12,10 +13,21 @@ class MazeGame extends StatefulWidget {
   State<MazeGame> createState() => _MazeGameState();
 }
 
-class _MazeGameState extends State<MazeGame> {
+class _MazeGameState extends State<MazeGame> with WidgetsBindingObserver {
 
   MazeController mController = Get.put(MazeController());
 
+  @override
+  void didChangeAppLifecycleState(AppLifecycleState state) {
+    if(state == AppLifecycleState.paused){
+      print("p$state");
+      AudioPlayerClass.instance.dismissBgPlayer();
+    }
+    if(state == AppLifecycleState.resumed){
+      AudioPlayerClass.instance.restartBg();
+    }
+    super.didChangeAppLifecycleState(state);
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -33,7 +45,7 @@ class _MazeGameState extends State<MazeGame> {
                 crossAxisAlignment: CrossAxisAlignment.center,
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
-                  Lottie.asset(rabbitAndCarrot),
+                  Lottie.asset(mController.level.value == 5 ? rabbitFinishJson : rabbitAndCarrot),
                   Text(
                     mController.isComplete.value ? "Congratulations You completed all level" :  "You win the Game!!\nCongratulations",
                     textAlign: TextAlign.center,
@@ -60,6 +72,7 @@ class _MazeGameState extends State<MazeGame> {
                         color: Colors.amber.shade300,
                         borderRadius: BorderRadius.circular(13),
                       ),
+                      margin: const EdgeInsets.only(right: 30, left: 30),
                       child: const Icon(Icons.replay, color: Colors.white, size: 28,),
                     ),
                   ) : Row(
@@ -114,6 +127,7 @@ class _MazeGameState extends State<MazeGame> {
                   children: [
                     GestureDetector(
                       onTap: (){
+                        AudioPlayerClass.instance.play(beepAudio);
                         Get.back();
                       },
                       child: Container(
@@ -131,7 +145,7 @@ class _MazeGameState extends State<MazeGame> {
                                   spreadRadius: 0.5),
                             ]
                         ),
-                        child: Icon(Icons.grid_view_rounded, color: Colors.amber,),
+                        child: const Icon(Icons.grid_view_rounded, color: Colors.amber,),
                       ),
                     ),
                     Padding(
@@ -140,13 +154,6 @@ class _MazeGameState extends State<MazeGame> {
                         decoration: BoxDecoration(
                           color: Colors.white,
                           borderRadius: BorderRadius.circular(13),
-                          // boxShadow: const[
-                          //   BoxShadow(
-                          //       color: Colors.white,
-                          //       offset: Offset(6, 6),
-                          //       blurRadius: 35,
-                          //       spreadRadius: 0.5),
-                          // ]
                         ),
                         child: Padding(
                           padding: const EdgeInsets.all(8.0),
@@ -178,7 +185,7 @@ class _MazeGameState extends State<MazeGame> {
                         wallThickness: 4.0,
                         wallColor: Colors.white,
                         finish: MazeItem(
-                            carrotImage,
+                            mController.level.value == 5 ? riceCakeImage :carrotImage,
                             ImageType.asset),
                         onFinish: () => mController.onFinishGame()),
                   );

@@ -5,7 +5,10 @@ import 'package:flutter_custom_clippers/flutter_custom_clippers.dart';
 import 'package:get/get.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:trainyourbrain/controller/findPathLevelController.dart';
+import 'package:trainyourbrain/helper/audioPlayer.dart';
+import 'package:trainyourbrain/helper/image.dart';
 import 'package:trainyourbrain/helper/storageKey.dart';
+import 'package:trainyourbrain/helper/utils.dart';
 import 'package:trainyourbrain/model/homeData.dart';
 import 'package:trainyourbrain/view/maza/mazeData.dart';
 import 'package:trainyourbrain/view/maza/mazeGame.dart';
@@ -25,10 +28,10 @@ class _MazeLevelState extends State<MazeLevel> {
   void initState() {
     super.initState();
     Future.delayed(const Duration(milliseconds: 500), (){
-      final result = StorageKey.instance.getStorage(key: StorageKey.copFirst)??false;
+      final result = StorageKey.instance.getStorage(key: StorageKey.findPathFirst)??false;
       if(!result){
-        StorageKey.instance.setStorage(key: StorageKey.copFirst, msg: true);
-        mController.showCustomDialog(context, "Find the Path", "A rabbit wants a carrot guid the rabbit to find the carrot.");
+        StorageKey.instance.setStorage(key: StorageKey.findPathFirst, msg: true);
+        mController.showCustomDialog(context);
       }
     });
   }
@@ -51,7 +54,7 @@ class _MazeLevelState extends State<MazeLevel> {
                   children: [
                     GestureDetector(
                       onTap: (){
-                        playAudio();
+                        playAudio(beepAudio);
                         Get.back();
                       },
                       child: Container(
@@ -79,8 +82,8 @@ class _MazeLevelState extends State<MazeLevel> {
                     ),),
                     GestureDetector(
                       onTap: (){
-                        playAudio();
-                        mController.showCustomDialog(context, "Find the Path", "A rabbit wants a carrot guid the rabbit to find the carrot.");
+                        playAudio(beepAudio);
+                        mController.showCustomDialog(context);
                       },
                       child: Container(
                         height: 50,
@@ -125,7 +128,7 @@ class _MazeLevelState extends State<MazeLevel> {
                       onTap: (){
                         var row = index <= 1 ? mazeData[index]["rows"] : Random().nextInt(10) + 10;
                         var column = index <= 1 ? mazeData[index]["column"] : Random().nextInt(10) + 10;
-                        playAudio();
+                        playAudio(clickAudio);
                         if(mController.checkLevel(index+1)) {
                           Get.to(() => const MazeGame(),
                               transition: Transition.rightToLeftWithFade,

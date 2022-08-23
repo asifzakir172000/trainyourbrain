@@ -3,7 +3,9 @@ import 'package:flutter_custom_clippers/flutter_custom_clippers.dart';
 import 'package:get/get.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:trainyourbrain/controller/wordColorLevelController.dart';
+import 'package:trainyourbrain/helper/image.dart';
 import 'package:trainyourbrain/helper/storageKey.dart';
+import 'package:trainyourbrain/helper/utils.dart';
 import 'package:trainyourbrain/model/homeData.dart';
 import 'package:trainyourbrain/view/wordColor/wordColorGame.dart';
 
@@ -22,12 +24,11 @@ class _WordColorLevelState extends State<WordColorLevel> {
   void initState() {
     super.initState();
     Future.delayed(const Duration(milliseconds: 500), (){
-      final result = StorageKey.instance.getStorage(key: StorageKey.copFirst)??false;
+      final result = StorageKey.instance.getStorage(key: StorageKey.wordColorFirst)??false;
       if(!result){
-        StorageKey.instance.setStorage(key: StorageKey.copFirst, msg: true);
-        mController.showCustomDialog(context, "Word Color\nChallenge", "Select the correct color shown in word.");
+        StorageKey.instance.setStorage(key: StorageKey.wordColorFirst, msg: true);
+        mController.showCustomDialog(context);
       }
-
     });
   }
 
@@ -49,7 +50,7 @@ class _WordColorLevelState extends State<WordColorLevel> {
                   children: [
                     GestureDetector(
                       onTap: (){
-                        playAudio();
+                        playAudio(beepAudio);
                         Get.back();
                       },
                       child: Container(
@@ -77,9 +78,9 @@ class _WordColorLevelState extends State<WordColorLevel> {
                     ),),
                     GestureDetector(
                       onTap: (){
-                        playAudio();
-                        mController.showCustomDialog(context, "Word Color\nChallenge", "Select the correct color shown in word.");
-                      },
+                        playAudio(beepAudio);
+                        mController.showCustomDialog(context);
+                       },
                       child: Container(
                         height: 50,
                         width: 50,
@@ -121,7 +122,7 @@ class _WordColorLevelState extends State<WordColorLevel> {
                   itemBuilder: (BuildContext context, int index){
                     return GestureDetector(
                       onTap: (){
-                        playAudio();
+                        playAudio(clickAudio);
                         if(mController.checkLevel(index+1)) {
                           var num = index >= 2 ? 3 : 6;
                           Get.to(() => const WordColorGame(),

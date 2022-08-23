@@ -2,11 +2,12 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:trainyourbrain/helper/storageKey.dart';
 import 'package:video_player/video_player.dart';
+import 'package:lottie/lottie.dart';
+import 'package:trainyourbrain/helper/image.dart';
 
 class FindPathLevelController extends GetxController{
 
   var level = 0.obs;
-  late VideoPlayerController controller;
 
   checkLevel(index){
     var levelC = level.value + 1;
@@ -29,9 +30,7 @@ class FindPathLevelController extends GetxController{
     level.value = StorageKey.instance.getStorage(key: StorageKey.findPath)??0;
   }
 
-
-  void showCustomDialog(BuildContext context, title, des) {
-    setVideo();
+  void showCustomDialog(BuildContext context) {
     showGeneralDialog(
       context: context,
       transitionDuration: const Duration(milliseconds: 700),
@@ -42,6 +41,7 @@ class FindPathLevelController extends GetxController{
             crossAxisAlignment: CrossAxisAlignment.center,
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
+              const Spacer(),
               Padding(
                 padding: const EdgeInsets.only(top: 10, left: 10, ),
                 child: Container(
@@ -49,11 +49,11 @@ class FindPathLevelController extends GetxController{
                     color: Colors.white,
                     borderRadius: BorderRadius.circular(13),
                   ),
-                  child: Padding(
-                    padding: const EdgeInsets.all(8.0),
+                  child: const Padding(
+                    padding: EdgeInsets.all(8.0),
                     child: Text(
-                      title,
-                      style: const TextStyle(
+                      "Find the Path",
+                      style: TextStyle(
                           fontSize: 38,
                           decoration: TextDecoration.none,
                           fontWeight: FontWeight.bold,
@@ -74,21 +74,25 @@ class FindPathLevelController extends GetxController{
                 ),
               ),
               SizedBox(
-                height: MediaQuery.of(context).size.height / 3,
-                child: VideoPlayer(controller),
+                height: MediaQuery.of(context).size.height / 4,
+                width: MediaQuery.of(context).size.height / 4,
+                child: Lottie.asset(mazeVideoJson,
+                  fit: BoxFit.contain,
+                ),
               ),
-              Padding(
-                padding: const EdgeInsets.all(8.0),
+              const Padding(
+                padding: EdgeInsets.all(8.0),
                 child: Text(
-                  des,
-                  style: const TextStyle(
+                  "A rabbit wants a carrot guid the rabbit to find the carrot.",
+                  textAlign: TextAlign.center,
+                  style: TextStyle(
                       fontSize: 28,
                       decoration: TextDecoration.none,
                       fontWeight: FontWeight.bold,
                       color: Colors.amber),
                 ),
               ),
-
+              const Spacer(),
             ],
           ),
         );
@@ -112,21 +116,10 @@ class FindPathLevelController extends GetxController{
     );
   }
 
-  setVideo(){
-    controller = VideoPlayerController.asset('assets/audio/file.mp4');
-    controller.initialize();
-    controller.play();
-  }
-
   @override
   void onInit() {
     getLevel();
     super.onInit();
   }
 
-  @override
-  void dispose() {
-    controller.dispose();
-    super.dispose();
-  }
 }

@@ -35,6 +35,9 @@ class MazeController extends GetxController{
 
   cleanData(){
      isFinished.value = false;
+     if(level.value == 5){
+       isComplete.value = true;
+     }
   }
 
   onRestartGame(){
@@ -43,8 +46,6 @@ class MazeController extends GetxController{
 
   nextLevel(levelC){
     debugPrint('$levelC');
-    debugPrint(mazeData[levelC]["row"].toString());
-    debugPrint(mazeData[levelC]["column"].toString());
     rows.value = levelC <= 1 ? mazeData[levelC]["row"] : Random().nextInt(10) + 10;
     columns.value = levelC <= 1 ? mazeData[levelC]["column"] : Random().nextInt(10) + 10;
     level.value = levelC + 1;

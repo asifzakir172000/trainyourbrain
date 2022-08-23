@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:trainyourbrain/view/home.dart';
 import 'package:get_storage/get_storage.dart';
+import 'package:trainyourbrain/view/splash.dart';
 
 void main() async {
   await GetStorage.init();
@@ -20,7 +20,7 @@ class MyApp extends StatelessWidget {
       theme: ThemeData(
         primarySwatch: Colors.amber,
       ),
-      home: const HomePage(),
+      home: SplashScreen(),
     );
   }
 }

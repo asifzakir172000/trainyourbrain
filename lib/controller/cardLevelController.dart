@@ -1,12 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:lottie/lottie.dart';
+import 'package:trainyourbrain/helper/image.dart';
 import 'package:trainyourbrain/helper/storageKey.dart';
-import 'package:video_player/video_player.dart';
+import 'package:trainyourbrain/helper/utils.dart';
 
 class CardLevelController extends GetxController{
 
   var level = 0.obs;
-  late VideoPlayerController controller;
 
   checkLevel(index){
     var levelC = level.value + 1;
@@ -29,8 +30,11 @@ class CardLevelController extends GetxController{
     level.value = StorageKey.instance.getStorage(key: StorageKey.cop)??0;
   }
 
-  void showCustomDialog(BuildContext context, title, des) {
-    setVideo();
+  show(context){
+    Utils.instance.showCustomDialog(context, "", "", cardVideoJson);
+  }
+
+  void showCustomDialog(BuildContext context) {
     showGeneralDialog(
       context: context,
       transitionDuration: const Duration(milliseconds: 700),
@@ -41,6 +45,7 @@ class CardLevelController extends GetxController{
             crossAxisAlignment: CrossAxisAlignment.center,
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
+              const Spacer(),
               Padding(
                 padding: const EdgeInsets.only(top: 10, left: 10, ),
                 child: Container(
@@ -48,11 +53,11 @@ class CardLevelController extends GetxController{
                     color: Colors.white,
                     borderRadius: BorderRadius.circular(13),
                   ),
-                  child: Padding(
-                    padding: const EdgeInsets.all(8.0),
+                  child: const Padding(
+                    padding: EdgeInsets.all(8.0),
                     child: Text(
-                      title,
-                      style: const TextStyle(
+                      "Cards Of Pairs",
+                      style: TextStyle(
                           fontSize: 38,
                           decoration: TextDecoration.none,
                           fontWeight: FontWeight.bold,
@@ -73,21 +78,25 @@ class CardLevelController extends GetxController{
                 ),
               ),
               SizedBox(
-                height: MediaQuery.of(context).size.height / 3,
-                child: VideoPlayer(controller),
+                height: MediaQuery.of(context).size.height / 4,
+                width: MediaQuery.of(context).size.height / 4,
+                child: Lottie.asset(cardVideoJson,
+                  fit: BoxFit.contain,
+                ),
               ),
-              Padding(
-                padding: const EdgeInsets.all(8.0),
+              const Padding(
+                padding: EdgeInsets.all(8.0),
                 child: Text(
-                  des,
-                  style: const TextStyle(
+                  "Memorize the Card and match with correct one.",
+                  textAlign: TextAlign.center,
+                  style: TextStyle(
                       fontSize: 28,
                       decoration: TextDecoration.none,
                       fontWeight: FontWeight.bold,
                       color: Colors.amber),
                 ),
               ),
-
+              const Spacer(),
             ],
           ),
         );
@@ -111,24 +120,11 @@ class CardLevelController extends GetxController{
     );
   }
 
-  setVideo(){
-    controller = VideoPlayerController.asset('assets/audio/file.mp4');
-    controller.initialize();
-    controller.play();
-    controller.setLooping(true);
-    controller.setVolume(0.0);
-  }
-
   @override
   void onInit() {
     getLevel();
     super.onInit();
   }
 
-  @override
-  void dispose() {
-    controller.dispose();
-    super.dispose();
-  }
 
 }

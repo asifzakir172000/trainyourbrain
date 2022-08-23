@@ -3,7 +3,9 @@ import 'package:flutter_custom_clippers/flutter_custom_clippers.dart';
 import 'package:get/get.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:trainyourbrain/controller/findNewLevelController.dart';
+import 'package:trainyourbrain/helper/image.dart';
 import 'package:trainyourbrain/helper/storageKey.dart';
+import 'package:trainyourbrain/helper/utils.dart';
 import 'package:trainyourbrain/model/homeData.dart';
 import 'package:trainyourbrain/view/findNew/findNewGame.dart';
 
@@ -22,10 +24,10 @@ class _FindNewLevelState extends State<FindNewLevel> {
    void initState() {
      super.initState();
      Future.delayed(const Duration(milliseconds: 500), (){
-       final result = StorageKey.instance.getStorage(key: StorageKey.copFirst)??false;
+       final result = StorageKey.instance.getStorage(key: StorageKey.findNewFirst)??false;
        if(!result){
-         StorageKey.instance.setStorage(key: StorageKey.copFirst, msg: true);
-         mController.showCustomDialog(context, "Find New Card.", "Memorize the Card first showing card and than find the new card.");
+         StorageKey.instance.setStorage(key: StorageKey.findNewFirst, msg: true);
+         mController.showCustomDialog(context);
        }
      });
 
@@ -49,7 +51,7 @@ class _FindNewLevelState extends State<FindNewLevel> {
                   children: [
                     GestureDetector(
                       onTap: (){
-                        playAudio();
+                        playAudio(beepAudio);
                         Get.back();
                       },
                       child: Container(
@@ -77,8 +79,8 @@ class _FindNewLevelState extends State<FindNewLevel> {
                     ),),
                     GestureDetector(
                       onTap: (){
-                        playAudio();
-                        mController.showCustomDialog(context, "Find New Card.", "Memorize the Card first showing card and than find the new card.");
+                        playAudio(beepAudio);
+                        mController.showCustomDialog(context);
                       },
                       child: Container(
                         height: 50,
@@ -128,7 +130,7 @@ class _FindNewLevelState extends State<FindNewLevel> {
                         }else if(index >= 4 ){
                           showCard = 3;
                         }
-                        playAudio();
+                        playAudio(clickAudio);
                         if(mController.checkLevel(index+1)){
                           Get.to(() => const FindNewGame(), transition: Transition.rightToLeftWithFade, arguments: {
                             "num": num,

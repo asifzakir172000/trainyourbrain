@@ -6,6 +6,7 @@ import 'package:trainyourbrain/controller/cardLevelController.dart';
 import 'package:trainyourbrain/helper/audioPlayer.dart';
 import 'package:trainyourbrain/helper/image.dart';
 import 'package:trainyourbrain/helper/storageKey.dart';
+import 'package:trainyourbrain/helper/utils.dart';
 import 'package:trainyourbrain/model/homeData.dart';
 import 'package:trainyourbrain/view/card/cardGame2.dart';
 
@@ -28,7 +29,7 @@ class _CardLevelState extends State<CardLevel> {
       final result = StorageKey.instance.getStorage(key: StorageKey.copFirst)??false;
       if(!result){
         StorageKey.instance.setStorage(key: StorageKey.copFirst, msg: true);
-        mController.showCustomDialog(context, "Cards Of Pairs", "Memorize the Card and match with correct one.");
+        mController.showCustomDialog(context);
       }
     });
   }
@@ -51,7 +52,7 @@ class _CardLevelState extends State<CardLevel> {
                   children: [
                     GestureDetector(
                       onTap: (){
-                        playAudio();
+                        playAudio(beepAudio);
                         Get.back();
                       },
                       child: Container(
@@ -79,8 +80,9 @@ class _CardLevelState extends State<CardLevel> {
                     ),),
                     GestureDetector(
                       onTap: (){
-                        playAudio();
-                        mController.showCustomDialog(context, "Cards Of Pairs", "Memorize the Card and match with correct one.");
+                        playAudio(beepAudio);
+                        AudioPlayerClass.instance.playBg(bgAudio);
+                        mController.showCustomDialog(context);
                       },
                       child: Container(
                         height: 50,
@@ -123,10 +125,9 @@ class _CardLevelState extends State<CardLevel> {
                   itemBuilder: (BuildContext context, int index){
                     return GestureDetector(
                       onTap: (){
-                        playAudio();
+                        playAudio(clickAudio);
                         if(mController.checkLevel(index+1)){
                           var num = index >= 2 ? 6 : 4;
-                          // AudioPlayerClass.instance.dismissBgPlayer();
                           Get.to(() => const FlipCardTwoScreen(), transition: Transition.rightToLeftWithFade, arguments: {
                             "num": num,
                             "level": index + 1

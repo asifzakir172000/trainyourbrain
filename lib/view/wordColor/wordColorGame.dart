@@ -3,7 +3,9 @@ import 'package:get/get.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:lottie/lottie.dart';
 import 'package:trainyourbrain/controller/wordColorController.dart';
+import 'package:trainyourbrain/helper/audioPlayer.dart';
 import 'package:trainyourbrain/helper/image.dart';
+import 'package:trainyourbrain/model/homeData.dart';
 
 class WordColorGame extends StatefulWidget {
   const WordColorGame({Key? key}) : super(key: key);
@@ -59,6 +61,7 @@ class _WordColorGameState extends State<WordColorGame> {
                       color: Colors.amber.shade300,
                       borderRadius: BorderRadius.circular(13),
                     ),
+                    margin: const EdgeInsets.only(right: 30, left: 30),
                     child: const Icon(Icons.replay, color: Colors.white, size: 28,),
                   ),
                 ) : Row(
@@ -116,6 +119,7 @@ class _WordColorGameState extends State<WordColorGame> {
               children: [
                 GestureDetector(
                   onTap: (){
+                    AudioPlayerClass.instance.play(beepAudio);
                     Get.back();
                   },
                   child: Container(
@@ -195,7 +199,10 @@ class _WordColorGameState extends State<WordColorGame> {
               itemCount: mController.option.length,
               itemBuilder: (BuildContext context, int index){
                 return GestureDetector(
-                  onTap: (){mController.onCheck(mController.option[index].colorHex);},
+                  onTap: (){
+                    playAudio(beepAudio);
+                    mController.onCheck(mController.option[index].colorHex);
+                    },
                   child: Container(
                     decoration: BoxDecoration(
                         gradient: const LinearGradient(

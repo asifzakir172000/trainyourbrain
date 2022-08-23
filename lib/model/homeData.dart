@@ -10,21 +10,21 @@ List<Map<String, dynamic>> reasoningData = [
   {
     "image": cardImage,
     "onTap": () {
-      playAudio();
+      playAudio(clickAudio);
       Get.to(() => const CardLevel(), transition: Transition.rightToLeftWithFade);
     },
   },
   {
     "image": magnifyingGlass,
     "onTap": (){
-      playAudio();
+      playAudio(clickAudio);
       Get.to(() => const FindNewLevel(), transition: Transition.rightToLeftWithFade);
     },
   },
   {
     "image": mazeHomeImage,
     "onTap": (){
-      playAudio();
+      playAudio(clickAudio);
       Get.to(() => const MazeLevel(), transition: Transition.rightToLeftWithFade);
     },
   },
@@ -34,13 +34,13 @@ List<Map<String, dynamic>> attention = [
   {
     "image": wordColorGame,
     "onTap": (){
-      playAudio();
+      playAudio(clickAudio);
       Get.to(() => const WordColorLevel(), transition: Transition.rightToLeftWithFade);
     },
   },
 ];
 
 
-playAudio(){
-  AudioPlayerClass.instance.play(beepAudio);
+playAudio(audioName){
+  AudioPlayerClass.instance.play(audioName);
 }

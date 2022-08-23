@@ -1,37 +1,14 @@
+
 import 'package:flutter/material.dart';
-import 'package:get/get.dart';
 import 'package:lottie/lottie.dart';
-import 'package:trainyourbrain/helper/image.dart';
-import 'package:trainyourbrain/helper/storageKey.dart';
-import 'package:video_player/video_player.dart';
 
-class WordColorLevelController extends GetxController{
+class Utils {
 
-  var level = 0.obs;
+  Utils._internal();
+  static final Utils _instance = Utils._internal();
+  static Utils get instance => _instance;
 
-  checkLevel(index){
-    var levelC = level.value + 1;
-    if(index <= (levelC)){
-      return true;
-    }else{
-      Get.defaultDialog(
-          title: "Complete the $levelC level first \nthan you can Play $index Level.",
-          middleText: "",
-          backgroundColor: Colors.white,
-          middleTextStyle: const TextStyle(color: Colors.black),
-          radius: 20,
-          textCancel: "OK",
-      );
-    }
-    return false;
-  }
-
-  getData(){
-    level.value = StorageKey.instance.getStorage(key: StorageKey.wordColor)??0;
-    debugPrint("f ${level.value}");
-  }
-
-  void showCustomDialog(BuildContext context) {
+  void showCustomDialog(BuildContext context, title, des, json) {
     showGeneralDialog(
       context: context,
       transitionDuration: const Duration(milliseconds: 700),
@@ -50,11 +27,11 @@ class WordColorLevelController extends GetxController{
                     color: Colors.white,
                     borderRadius: BorderRadius.circular(13),
                   ),
-                  child: const Padding(
-                    padding: EdgeInsets.all(8.0),
+                  child: Padding(
+                    padding: const EdgeInsets.all(8.0),
                     child: Text(
-                      "Word Color\nChallenge",
-                      style: TextStyle(
+                      title,
+                      style: const TextStyle(
                           fontSize: 38,
                           decoration: TextDecoration.none,
                           fontWeight: FontWeight.bold,
@@ -77,16 +54,16 @@ class WordColorLevelController extends GetxController{
               SizedBox(
                 height: MediaQuery.of(context).size.height / 4,
                 width: MediaQuery.of(context).size.height / 4,
-                child: Lottie.asset(cardVideoJson,
+                child: Lottie.asset(json,
                   fit: BoxFit.contain,
                 ),
               ),
-              const Padding(
-                padding: EdgeInsets.all(8.0),
+              Padding(
+                padding: const EdgeInsets.all(8.0),
                 child: Text(
-                  "Select the correct color shown in word.",
+                  des,
                   textAlign: TextAlign.center,
-                  style: TextStyle(
+                  style: const TextStyle(
                       fontSize: 28,
                       decoration: TextDecoration.none,
                       fontWeight: FontWeight.bold,
@@ -101,9 +78,9 @@ class WordColorLevelController extends GetxController{
       transitionBuilder: (_, anim, __, child) {
         Tween<Offset> tween;
         if (anim.status == AnimationStatus.reverse) {
-          tween = Tween(begin: Offset(-1, 0), end: Offset.zero);
+          tween = Tween(begin: const Offset(-1, 0), end: Offset.zero);
         } else {
-          tween = Tween(begin: Offset(1, 0), end: Offset.zero);
+          tween = Tween(begin: const Offset(1, 0), end: Offset.zero);
         }
 
         return SlideTransition(
@@ -115,13 +92,6 @@ class WordColorLevelController extends GetxController{
         );
       },
     );
-  }
-
-
-  @override
-  void onInit() {
-    getData();
-    super.onInit();
   }
 
 }
