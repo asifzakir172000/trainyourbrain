@@ -5,6 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:get_storage/get_storage.dart';
 import 'package:trainyourbrain/controller/findPathLevelController.dart';
+import 'package:trainyourbrain/controller/homeController.dart';
 import 'package:trainyourbrain/helper/storageKey.dart';
 import 'package:trainyourbrain/view/maza/mazeData.dart';
 
@@ -14,15 +15,21 @@ class MazeController extends GetxController{
   var columns = 3.obs;
   var isFinished = false.obs;
   var level = 0.obs;
+  var isComplete = false.obs;
 
 
   onFinishGame(){
-    var levelP = StorageKey.instance.getStorage(key: StorageKey.cop)??0;
+    var levelP = StorageKey.instance.getStorage(key: StorageKey.findPath)??0;
     if(levelP < level.value){
-      StorageKey.instance.setStorage(key: StorageKey.cop, msg: level.value);
+      debugPrint(levelP.toString());
+      StorageKey.instance.setStorage(key: StorageKey.findPath, msg: level.value);
+      var per = StorageKey.instance.getStorage(key: StorageKey.reasoningPer)??0.0;
+      debugPrint(per.toString());
+      StorageKey.instance.setStorage(key: StorageKey.reasoningPer, msg: per + 1);
+      Get.find<FindPathLevelController>().getLevel();
+      Get.find<HomeController>().setData();
     }
     isFinished.value = true;
-    Get.find<FindPathLevelController>().getLevel();
     debugPrint('Hi from finish line!');
   }
 
@@ -35,7 +42,10 @@ class MazeController extends GetxController{
   }
 
   nextLevel(levelC){
-    rows.value = levelC <= 1 ? mazeData[levelC]["rows"] : Random().nextInt(10) + 10;
+    debugPrint('$levelC');
+    debugPrint(mazeData[levelC]["row"].toString());
+    debugPrint(mazeData[levelC]["column"].toString());
+    rows.value = levelC <= 1 ? mazeData[levelC]["row"] : Random().nextInt(10) + 10;
     columns.value = levelC <= 1 ? mazeData[levelC]["column"] : Random().nextInt(10) + 10;
     level.value = levelC + 1;
     cleanData();

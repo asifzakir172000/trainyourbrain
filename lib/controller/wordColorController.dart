@@ -1,6 +1,8 @@
 
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:trainyourbrain/controller/homeController.dart';
+import 'package:trainyourbrain/controller/wordColorLevelController.dart';
 import 'package:trainyourbrain/helper/storageKey.dart';
 import 'package:trainyourbrain/model/wordCOlorModel.dart';
 import 'package:trainyourbrain/model/wordColorOptionalModel.dart';
@@ -50,6 +52,10 @@ class WordColorController extends GetxController{
         if(levelP < level.value){
           debugPrint("fss $levelP");
           StorageKey.instance.setStorage(key: StorageKey.wordColor, msg: level.value);
+          var per = StorageKey.instance.getStorage(key: StorageKey.attentionPer)??0.0;
+          StorageKey.instance.setStorage(key: StorageKey.attentionPer, msg: per + 1);
+          Get.find<WordColorLevelController>().getData();
+          Get.find<HomeController>().setData();
         }
         index.value = 0;
         isFinish.value = true;

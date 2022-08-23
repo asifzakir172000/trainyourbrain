@@ -11,6 +11,12 @@ class StorageKey {
   static const findPath = "findPath";
   static const findNew = "findNew";
   static const wordColor = "wordColor";
+  static const copFirst = "copFirst";
+  static const findPathFirst = "findPathFirst";
+  static const findNewFirst = "findNewFirst";
+  static const wordColorFirst = "wordColorFirst";
+  static const reasoningPer = "reasoningPer";
+  static const attentionPer = "attentionPer";
 
 
   setStorage({key, msg}){

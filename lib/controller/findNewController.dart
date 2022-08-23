@@ -5,6 +5,7 @@ import 'package:flip_card/flip_card.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:trainyourbrain/controller/findNewLevelController.dart';
+import 'package:trainyourbrain/controller/homeController.dart';
 import 'package:trainyourbrain/helper/storageKey.dart';
 import 'package:trainyourbrain/view/card/cardData.dart';
 import 'package:trainyourbrain/view/findNew/findNewData.dart';
@@ -78,7 +79,10 @@ class FindNewController extends GetxController{
       if(levelP < level.value){
         debugPrint("fss $levelP");
         StorageKey.instance.setStorage(key: StorageKey.findNew, msg: level.value);
+        var per = StorageKey.instance.getStorage(key: StorageKey.reasoningPer)??0.0;
+        StorageKey.instance.setStorage(key: StorageKey.reasoningPer, msg: per + 1);
         Get.find<FindNewLevelController>().getLevel();
+        Get.find<HomeController>().setData();
       }
       isFinished.value = true;
       if(level.value == 5){

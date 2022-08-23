@@ -4,8 +4,9 @@ import 'package:flutter/material.dart';
 import 'package:flutter_custom_clippers/flutter_custom_clippers.dart';
 import 'package:get/get.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:trainyourbrain/controller/cardLevelController.dart';
 import 'package:trainyourbrain/controller/findPathLevelController.dart';
+import 'package:trainyourbrain/helper/storageKey.dart';
+import 'package:trainyourbrain/model/homeData.dart';
 import 'package:trainyourbrain/view/maza/mazeData.dart';
 import 'package:trainyourbrain/view/maza/mazeGame.dart';
 
@@ -21,6 +22,18 @@ class _MazeLevelState extends State<MazeLevel> {
   FindPathLevelController mController = Get.put(FindPathLevelController());
 
   @override
+  void initState() {
+    super.initState();
+    Future.delayed(const Duration(milliseconds: 500), (){
+      final result = StorageKey.instance.getStorage(key: StorageKey.copFirst)??false;
+      if(!result){
+        StorageKey.instance.setStorage(key: StorageKey.copFirst, msg: true);
+        mController.showCustomDialog(context, "Find the Path", "A rabbit wants a carrot guid the rabbit to find the carrot.");
+      }
+    });
+  }
+
+  @override
   Widget build(BuildContext context) {
     return Container(
       color: Colors.white,
@@ -32,12 +45,13 @@ class _MazeLevelState extends State<MazeLevel> {
             child:  ClipPath(
               clipper: OvalBottomBorderClipper(),
               child: Container(
-                color: Colors.amber,
+                color: Colors.amber.shade400,
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.spaceAround,
                   children: [
                     GestureDetector(
                       onTap: (){
+                        playAudio();
                         Get.back();
                       },
                       child: Container(
@@ -65,7 +79,8 @@ class _MazeLevelState extends State<MazeLevel> {
                     ),),
                     GestureDetector(
                       onTap: (){
-                        Get.back();
+                        playAudio();
+                        mController.showCustomDialog(context, "Find the Path", "A rabbit wants a carrot guid the rabbit to find the carrot.");
                       },
                       child: Container(
                         height: 50,
@@ -110,6 +125,7 @@ class _MazeLevelState extends State<MazeLevel> {
                       onTap: (){
                         var row = index <= 1 ? mazeData[index]["rows"] : Random().nextInt(10) + 10;
                         var column = index <= 1 ? mazeData[index]["column"] : Random().nextInt(10) + 10;
+                        playAudio();
                         if(mController.checkLevel(index+1)) {
                           Get.to(() => const MazeGame(),
                               transition: Transition.rightToLeftWithFade,
@@ -123,7 +139,13 @@ class _MazeLevelState extends State<MazeLevel> {
                       child: Card(
                         elevation: 2,
                         shadowColor: Colors.grey,
-                        color: mController.level.value > index ? Colors.green : Colors.amber,
+                        shape: RoundedRectangleBorder(
+                          side: BorderSide(
+                            color: mController.level.value > index ? Colors.green : Colors.amber, //<-- SEE HERE
+                          ),
+                          borderRadius: BorderRadius.circular(20.0),
+                        ),
+                        color: mController.level.value > index ? Colors.lightGreen.shade100 : Colors.amber.shade300,
                         child: Center(child: Text("${index + 1}", style: GoogleFonts.ubuntu(
                             color: Colors.white,
                             fontSize: 24

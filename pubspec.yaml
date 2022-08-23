@@ -40,8 +40,10 @@ dependencies:
   maze: ^3.0.0
   flutter_custom_clippers: ^2.0.0
   just_audio: ^0.9.28
+  percent_indicator: ^4.0.1
   lottie: ^1.4.1
   get_storage: ^2.0.3
+  video_player: ^2.2.18
 
 dev_dependencies:
   flutter_test:

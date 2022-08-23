@@ -4,7 +4,9 @@ import 'dart:async';
 import 'package:flip_card/flip_card.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:get_storage/get_storage.dart';
 import 'package:trainyourbrain/controller/cardLevelController.dart';
+import 'package:trainyourbrain/controller/homeController.dart';
 import 'package:trainyourbrain/helper/storageKey.dart';
 import 'package:trainyourbrain/view/card/cardData.dart';
 
@@ -17,6 +19,7 @@ class CardFlipController extends GetxController{
   var time = 0.obs;
   var left = 3.obs;
   var isFinished = false.obs;
+  var isComplete = false.obs;
   var data = <String>[].obs;
   var cardFlips = <bool>[].obs;
   var cardStateKeys = <GlobalKey<FlipCardState>>[].obs;
@@ -97,10 +100,16 @@ class CardFlipController extends GetxController{
                       var levelP = StorageKey.instance.getStorage(key: StorageKey.cop)??0;
                       if(levelP < level.value){
                         StorageKey.instance.setStorage(key: StorageKey.cop, msg: level.value);
+                        var per = StorageKey.instance.getStorage(key: StorageKey.reasoningPer)??0.0;
+                        StorageKey.instance.setStorage(key: StorageKey.reasoningPer, msg: per + 1);
+                        Get.find<CardLevelController>().getLevel();
+                        Get.find<HomeController>().setData();
                       }
                       isFinished.value = true;
                       start.value = false;
-                      Get.find<CardLevelController>().getLevel();
+                      if(level.value == 5){
+                        isComplete.value = true;
+                      }
                 });
           }
         }

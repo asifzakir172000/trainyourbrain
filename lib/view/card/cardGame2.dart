@@ -47,12 +47,12 @@ class _FlipCardScreenState extends State<FlipCardTwoScreen> {
                 height: MediaQuery.of(context).size.height,
                 child: Lottie.asset(congrats),
               ),
-              const Align(
+              Align(
                 alignment: Alignment.center,
                 child: Text(
-                  "You win the Game!!\nCongratulations",
+                  mController.isComplete.value ? "Congratulations You completed all level" : "You win the Game!!\nCongratulations",
                   textAlign: TextAlign.center,
-                  style: TextStyle(
+                  style: const TextStyle(
                       fontSize: 40,
                       fontWeight: FontWeight.w800,
                       color: Colors.amber),
@@ -62,7 +62,21 @@ class _FlipCardScreenState extends State<FlipCardTwoScreen> {
                   bottom: 20,
                   left: 0,
                   right: 0,
-                  child: Row(
+                  child: mController.isComplete.value ? GestureDetector(
+                    onTap: () {
+                      mController.restart();
+                    },
+                    child: Container(
+                      height: 50,
+                      width: MediaQuery.of(context).size.width / 2,
+                      alignment: Alignment.center,
+                      decoration: BoxDecoration(
+                        color: Colors.amber.shade300,
+                        borderRadius: BorderRadius.circular(13),
+                      ),
+                      child: const Icon(Icons.replay, color: Colors.white, size: 28,),
+                    ),
+                  ) :  Row(
                 mainAxisAlignment: MainAxisAlignment.spaceAround,
                 crossAxisAlignment: CrossAxisAlignment.center,
                 children: [
@@ -75,7 +89,7 @@ class _FlipCardScreenState extends State<FlipCardTwoScreen> {
                       width: 50,
                       alignment: Alignment.center,
                       decoration: BoxDecoration(
-                        color: Colors.amber,
+                        color: Colors.amber.shade300,
                         borderRadius: BorderRadius.circular(13),
                       ),
                       child: const Icon(Icons.replay, color: Colors.white, size: 28,),
@@ -90,7 +104,7 @@ class _FlipCardScreenState extends State<FlipCardTwoScreen> {
                       width: MediaQuery.of(context).size.width * .5,
                       alignment: Alignment.center,
                       decoration: BoxDecoration(
-                        color: Colors.amber,
+                        color: Colors.amber.shade300,
                         borderRadius: BorderRadius.circular(13),
                       ),
                       child: const Icon(Icons.arrow_forward, color: Colors.white, size: 28,),
@@ -103,7 +117,7 @@ class _FlipCardScreenState extends State<FlipCardTwoScreen> {
         ),
       )
           : Scaffold(
-        backgroundColor: Colors.amber,
+        backgroundColor: Colors.amber.shade400,
         body: SafeArea(
           child: SingleChildScrollView(
             child: Column(

@@ -27,16 +27,20 @@ class _WordColorGameState extends State<WordColorGame> {
               height: MediaQuery.of(context).size.height,
               child: Lottie.asset(congrats),
             ),
-            Align(
-              alignment: Alignment.center,
-              child: Text(
-                mController.isComplete.value ? "Congratulations You completed all level" : "You win the Game!!\nCongratulations",
-                textAlign: TextAlign.center,
-                style: const TextStyle(
-                    fontSize: 40,
-                    fontWeight: FontWeight.w800,
-                    color: Colors.amber),
-              ),
+            Column(
+              crossAxisAlignment: CrossAxisAlignment.center,
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                Lottie.asset(colorsJson),
+                Text(
+                  mController.isComplete.value ? "Congratulations You completed all level" :  "You win the Game!!\nCongratulations",
+                  textAlign: TextAlign.center,
+                  style: const TextStyle(
+                      fontSize: 40,
+                      fontWeight: FontWeight.w800,
+                      color: Colors.amberAccent),
+                ),
+              ],
             ),
             Positioned(
               bottom: 20,
@@ -52,7 +56,7 @@ class _WordColorGameState extends State<WordColorGame> {
                     width: MediaQuery.of(context).size.width / 2,
                     alignment: Alignment.center,
                     decoration: BoxDecoration(
-                      color: Colors.amber,
+                      color: Colors.amber.shade300,
                       borderRadius: BorderRadius.circular(13),
                     ),
                     child: const Icon(Icons.replay, color: Colors.white, size: 28,),
@@ -70,7 +74,7 @@ class _WordColorGameState extends State<WordColorGame> {
                         width: 50,
                         alignment: Alignment.center,
                         decoration: BoxDecoration(
-                          color: Colors.amber,
+                          color: Colors.amber.shade300,
                           borderRadius: BorderRadius.circular(13),
                         ),
                         child: const Icon(Icons.replay, color: Colors.white, size: 28,),
@@ -85,7 +89,7 @@ class _WordColorGameState extends State<WordColorGame> {
                         width: MediaQuery.of(context).size.width * .5,
                         alignment: Alignment.center,
                         decoration: BoxDecoration(
-                          color: Colors.amber,
+                          color: Colors.amber.shade300,
                           borderRadius: BorderRadius.circular(13),
                         ),
                         child: const Icon(Icons.arrow_forward, color: Colors.white, size: 28,),
@@ -100,7 +104,7 @@ class _WordColorGameState extends State<WordColorGame> {
       ),
     )
         : Scaffold(
-      backgroundColor: Colors.amber,
+      backgroundColor: Colors.amber.shade400,
       body: SafeArea(
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
@@ -211,7 +215,7 @@ class _WordColorGameState extends State<WordColorGame> {
                 );
               },
             ),
-            Spacer(),
+            const Spacer(),
           ],
         ),
       ),

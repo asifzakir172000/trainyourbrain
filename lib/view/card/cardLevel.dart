@@ -3,6 +3,10 @@ import 'package:flutter_custom_clippers/flutter_custom_clippers.dart';
 import 'package:get/get.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:trainyourbrain/controller/cardLevelController.dart';
+import 'package:trainyourbrain/helper/audioPlayer.dart';
+import 'package:trainyourbrain/helper/image.dart';
+import 'package:trainyourbrain/helper/storageKey.dart';
+import 'package:trainyourbrain/model/homeData.dart';
 import 'package:trainyourbrain/view/card/cardGame2.dart';
 
 class CardLevel extends StatefulWidget {
@@ -15,7 +19,20 @@ class CardLevel extends StatefulWidget {
 class _CardLevelState extends State<CardLevel> {
 
   CardLevelController mController = Get.put(CardLevelController());
-  
+
+
+  @override
+  void initState() {
+    super.initState();
+    Future.delayed(const Duration(milliseconds: 500), (){
+      final result = StorageKey.instance.getStorage(key: StorageKey.copFirst)??false;
+      if(!result){
+        StorageKey.instance.setStorage(key: StorageKey.copFirst, msg: true);
+        mController.showCustomDialog(context, "Cards Of Pairs", "Memorize the Card and match with correct one.");
+      }
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     return Container(
@@ -28,12 +45,13 @@ class _CardLevelState extends State<CardLevel> {
             child:  ClipPath(
               clipper: OvalBottomBorderClipper(),
               child: Container(
-                color: Colors.amber,
+                color: Colors.amber.shade400,
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.spaceAround,
                   children: [
                     GestureDetector(
                       onTap: (){
+                        playAudio();
                         Get.back();
                       },
                       child: Container(
@@ -50,7 +68,7 @@ class _CardLevelState extends State<CardLevel> {
                                   spreadRadius: 0.5),
                             ]
                         ),
-                        child: Icon(Icons.home, color: Colors.amber,),
+                        child: const Icon(Icons.home, color: Colors.amber,),
                       ),
                     ),
                     Text("Pairs of Card", style: GoogleFonts.ubuntu(
@@ -61,7 +79,8 @@ class _CardLevelState extends State<CardLevel> {
                     ),),
                     GestureDetector(
                       onTap: (){
-                        Get.back();
+                        playAudio();
+                        mController.showCustomDialog(context, "Cards Of Pairs", "Memorize the Card and match with correct one.");
                       },
                       child: Container(
                         height: 50,
@@ -104,8 +123,10 @@ class _CardLevelState extends State<CardLevel> {
                   itemBuilder: (BuildContext context, int index){
                     return GestureDetector(
                       onTap: (){
+                        playAudio();
                         if(mController.checkLevel(index+1)){
                           var num = index >= 2 ? 6 : 4;
+                          // AudioPlayerClass.instance.dismissBgPlayer();
                           Get.to(() => const FlipCardTwoScreen(), transition: Transition.rightToLeftWithFade, arguments: {
                             "num": num,
                             "level": index + 1
@@ -115,7 +136,13 @@ class _CardLevelState extends State<CardLevel> {
                       child: Card(
                         elevation: 2,
                         shadowColor: Colors.grey,
-                        color: mController.level.value > index ? Colors.green : Colors.amber,
+                        shape: RoundedRectangleBorder(
+                          side: BorderSide(
+                            color: mController.level.value > index ? Colors.green : Colors.amber, //<-- SEE HERE
+                          ),
+                          borderRadius: BorderRadius.circular(20.0),
+                        ),
+                        color: mController.level.value > index ? Colors.lightGreen.shade100 : Colors.amber.shade300,
                         child: Center(child: Text("${index + 1}", style: GoogleFonts.ubuntu(
                             color: Colors.white,
                             fontSize: 24

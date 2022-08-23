@@ -50,13 +50,13 @@ List<WordColorModel> wordColorModel = [
        questionTex: redName,
        questionTextColor: yellowHexCode,
        correctColor: yellowHexCode,
-       optionModel: getWordColorOptionModelData(yellowName, yellowHexCode, 5)
+       optionModel: getWordColorOptionModelData(yellowName, yellowHexCode, 3)
    ),
    WordColorModel(
        questionTex: purpleName,
        questionTextColor: redHexCode,
        correctColor: redHexCode,
-       optionModel: getWordColorOptionModelData(redName, redHexCode, 5)
+       optionModel: getWordColorOptionModelData(redName, redHexCode, 3)
    ),
    WordColorModel(
        questionTex: yellowName,
@@ -68,7 +68,7 @@ List<WordColorModel> wordColorModel = [
        questionTex: blueName,
        questionTextColor: purpleHexCode,
        correctColor: purpleHexCode,
-       optionModel: getWordColorOptionModelData(purpleName, purpleHexCode, 5)
+       optionModel: getWordColorOptionModelData(purpleName, purpleHexCode, 3)
    ),
    WordColorModel(
        questionTex: navyName,
@@ -80,7 +80,7 @@ List<WordColorModel> wordColorModel = [
        questionTex: maroonName,
        questionTextColor: yellowHexCode,
        correctColor: yellowHexCode,
-       optionModel: getWordColorOptionModelData(yellowName, yellowHexCode, 5)
+       optionModel: getWordColorOptionModelData(yellowName, yellowHexCode, 3)
    ),
 ];
 

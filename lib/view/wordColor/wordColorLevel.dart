@@ -3,6 +3,8 @@ import 'package:flutter_custom_clippers/flutter_custom_clippers.dart';
 import 'package:get/get.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:trainyourbrain/controller/wordColorLevelController.dart';
+import 'package:trainyourbrain/helper/storageKey.dart';
+import 'package:trainyourbrain/model/homeData.dart';
 import 'package:trainyourbrain/view/wordColor/wordColorGame.dart';
 
 class WordColorLevel extends StatefulWidget {
@@ -17,6 +19,19 @@ class _WordColorLevelState extends State<WordColorLevel> {
   WordColorLevelController mController = Get.put(WordColorLevelController());
 
   @override
+  void initState() {
+    super.initState();
+    Future.delayed(const Duration(milliseconds: 500), (){
+      final result = StorageKey.instance.getStorage(key: StorageKey.copFirst)??false;
+      if(!result){
+        StorageKey.instance.setStorage(key: StorageKey.copFirst, msg: true);
+        mController.showCustomDialog(context, "Word Color\nChallenge", "Select the correct color shown in word.");
+      }
+
+    });
+  }
+
+  @override
   Widget build(BuildContext context) {
     return Container(
       color: Colors.white,
@@ -28,12 +43,13 @@ class _WordColorLevelState extends State<WordColorLevel> {
             child:  ClipPath(
               clipper: OvalBottomBorderClipper(),
               child: Container(
-                color: Colors.amber,
+                color: Colors.amber.shade400,
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.spaceAround,
                   children: [
                     GestureDetector(
                       onTap: (){
+                        playAudio();
                         Get.back();
                       },
                       child: Container(
@@ -53,7 +69,7 @@ class _WordColorLevelState extends State<WordColorLevel> {
                         child: Icon(Icons.home, color: Colors.amber,),
                       ),
                     ),
-                    Text("Word Color Challenge", style: GoogleFonts.ubuntu(
+                    Text("Word Color\nChallenge", style: GoogleFonts.ubuntu(
                         color: Colors.white,
                         fontSize: 30,
                         fontWeight: FontWeight.w600,
@@ -61,7 +77,8 @@ class _WordColorLevelState extends State<WordColorLevel> {
                     ),),
                     GestureDetector(
                       onTap: (){
-                        Get.back();
+                        playAudio();
+                        mController.showCustomDialog(context, "Word Color\nChallenge", "Select the correct color shown in word.");
                       },
                       child: Container(
                         height: 50,
@@ -104,6 +121,7 @@ class _WordColorLevelState extends State<WordColorLevel> {
                   itemBuilder: (BuildContext context, int index){
                     return GestureDetector(
                       onTap: (){
+                        playAudio();
                         if(mController.checkLevel(index+1)) {
                           var num = index >= 2 ? 3 : 6;
                           Get.to(() => const WordColorGame(),
@@ -116,7 +134,13 @@ class _WordColorLevelState extends State<WordColorLevel> {
                       child: Card(
                         elevation: 2,
                         shadowColor: Colors.grey,
-                        color: mController.level.value > index ? Colors.green : Colors.amber,
+                        shape: RoundedRectangleBorder(
+                          side: BorderSide(
+                            color: mController.level.value > index ? Colors.green : Colors.amber, //<-- SEE HERE
+                          ),
+                          borderRadius: BorderRadius.circular(20.0),
+                        ),
+                        color: mController.level.value > index ? Colors.lightGreen.shade100 : Colors.amber.shade300,
                         child: Center(child: Text("${index + 1}", style: GoogleFonts.ubuntu(
                             color: Colors.white,
                             fontSize: 24

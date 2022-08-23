@@ -1,4 +1,3 @@
-import 'dart:math';
 
 const List<Map<String, dynamic>> mazeData = [
   {
@@ -6,7 +5,7 @@ const List<Map<String, dynamic>> mazeData = [
     "column": 6,
   },
   {
-    "row": 18,
-    "column": 10,
+    "row": 14,
+    "column": 8,
   },
 ];
