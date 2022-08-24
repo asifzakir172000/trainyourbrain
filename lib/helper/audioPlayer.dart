@@ -19,9 +19,9 @@ class AudioPlayerClass {
 
   playBg(filename){
     bgPlayer.setAsset(filename);
+    bgPlayer.setVolume(0.02);
     bgPlayer.play();
     bgPlayer.setLoopMode(LoopMode.all);
-    bgPlayer.setVolume(0.3);
   }
 
   dismiss(){

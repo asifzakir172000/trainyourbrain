@@ -67,7 +67,7 @@ class _WordColorLevelState extends State<WordColorLevel> {
                                   spreadRadius: 0.5),
                             ]
                         ),
-                        child: Icon(Icons.home, color: Colors.amber,),
+                        child: const Icon(Icons.home, color: Colors.amber,),
                       ),
                     ),
                     Text("Word Color\nChallenge", style: GoogleFonts.ubuntu(

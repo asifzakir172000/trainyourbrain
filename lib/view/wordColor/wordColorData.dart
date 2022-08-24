@@ -1,3 +1,4 @@
+import 'package:flutter/material.dart';
 import 'package:trainyourbrain/model/wordCOlorModel.dart';
 import 'package:trainyourbrain/helper/constants.dart';
 import 'package:trainyourbrain/model/wordColorOptionalModel.dart';
@@ -18,67 +19,67 @@ List<WordColorOptionalModel> wordColorModelOption = [
 List<WordColorModel> wordColorModel = [
    WordColorModel(
       questionTex: blackName,
-      questionTextColor: greenHexCode,
+      questionTextColor: blackHexCode,
       correctColor: greenHexCode,
       optionModel: wordColorModelOption
    ),
    WordColorModel(
        questionTex: whiteName,
-       questionTextColor: blackHexCode,
+       questionTextColor: whiteHexCode,
        correctColor: blackHexCode,
        optionModel: wordColorModelOption
    ),
    WordColorModel(
        questionTex: greenName,
-       questionTextColor: whiteHexCode,
+       questionTextColor: greenHexCode,
        correctColor: whiteHexCode,
        optionModel: wordColorModelOption
    ),
    WordColorModel(
        questionTex: silverName,
-       questionTextColor: grayHexCode,
+       questionTextColor: silverHexCode,
        correctColor: grayHexCode,
        optionModel: getWordColorOptionModelData(grayName, grayHexCode, 3)
    ),
    WordColorModel(
        questionTex: grayName,
-       questionTextColor: maroonHexCode,
+       questionTextColor: grayHexCode,
        correctColor: maroonHexCode,
        optionModel: getWordColorOptionModelData(maroonName, maroonHexCode, 3)
    ),
    WordColorModel(
        questionTex: redName,
-       questionTextColor: yellowHexCode,
+       questionTextColor: redHexCode,
        correctColor: yellowHexCode,
        optionModel: getWordColorOptionModelData(yellowName, yellowHexCode, 3)
    ),
    WordColorModel(
        questionTex: purpleName,
-       questionTextColor: redHexCode,
+       questionTextColor: purpleHexCode,
        correctColor: redHexCode,
        optionModel: getWordColorOptionModelData(redName, redHexCode, 3)
    ),
    WordColorModel(
        questionTex: yellowName,
-       questionTextColor: whiteHexCode,
+       questionTextColor: yellowHexCode,
        correctColor: whiteHexCode,
        optionModel: getWordColorOptionModelData(whiteName, whiteHexCode, 3)
    ),
    WordColorModel(
        questionTex: blueName,
-       questionTextColor: purpleHexCode,
+       questionTextColor: blueHexCode,
        correctColor: purpleHexCode,
        optionModel: getWordColorOptionModelData(purpleName, purpleHexCode, 3)
    ),
    WordColorModel(
        questionTex: navyName,
-       questionTextColor: blueHexCode,
+       questionTextColor: navyHexCode,
        correctColor: blueHexCode,
        optionModel: getWordColorOptionModelData(blueName, blueHexCode, 3)
    ),
    WordColorModel(
        questionTex: maroonName,
-       questionTextColor: yellowHexCode,
+       questionTextColor: maroonHexCode,
        correctColor: yellowHexCode,
        optionModel: getWordColorOptionModelData(yellowName, yellowHexCode, 3)
    ),
@@ -114,8 +115,28 @@ List<WordColorOptionalModel> getWordColorOptionModelData(correctColorName, corre
             buttonTextName: getColorName[i],
             colorHex: getColorName[i],);
          wordColorModelOption.add(data2);
+      }else{
+         WordColorOptionalModel data2 = WordColorOptionalModel(
+            buttonTextName: getColorName[i+1],
+            colorHex: getColorName[i+1],);
+         wordColorModelOption.add(data2);
       }
    }
+
    wordColorModelOption.shuffle();
    return wordColorModelOption;
+}
+
+ifSameColor(i){
+   var color = getColorName;
+   var colorHax = getColorHaxCode;
+   color.shuffle();
+   colorHax.shuffle();
+   WordColorOptionalModel data2 = WordColorOptionalModel(
+      buttonTextName: color[i],
+      colorHex: colorHax[i],);
+   if(wordColorModelOption.contains(data2)){
+      return data2;
+   }
+   return null;
 }

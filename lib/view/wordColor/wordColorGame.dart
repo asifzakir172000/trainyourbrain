@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:lottie/lottie.dart';
+import 'package:trainyourbrain/component/shakeWidget.dart';
 import 'package:trainyourbrain/controller/wordColorController.dart';
 import 'package:trainyourbrain/helper/audioPlayer.dart';
 import 'package:trainyourbrain/helper/image.dart';
@@ -17,6 +18,7 @@ class WordColorGame extends StatefulWidget {
 class _WordColorGameState extends State<WordColorGame> {
 
   WordColorController mController = Get.put(WordColorController());
+  final shakeKey = GlobalKey<ShakeWidgetState>();
 
   @override
   Widget build(BuildContext context) {
@@ -146,13 +148,6 @@ class _WordColorGameState extends State<WordColorGame> {
                     decoration: BoxDecoration(
                       color: Colors.white,
                       borderRadius: BorderRadius.circular(13),
-                      // boxShadow: const[
-                      //   BoxShadow(
-                      //       color: Colors.white,
-                      //       offset: Offset(6, 6),
-                      //       blurRadius: 35,
-                      //       spreadRadius: 0.5),
-                      // ]
                     ),
                     child: Padding(
                       padding: const EdgeInsets.all(8.0),
@@ -169,7 +164,7 @@ class _WordColorGameState extends State<WordColorGame> {
                 const SizedBox()
               ],
             ),),
-            Spacer(),
+            const Spacer(),
             Container(
               alignment: Alignment.center,
               width: MediaQuery.of(context).size.width,
@@ -180,14 +175,44 @@ class _WordColorGameState extends State<WordColorGame> {
                   fit: BoxFit.cover,
                 ),
               ),
-              child: Text("${mController.questionText}", style: TextStyle(
-                fontWeight: FontWeight.w900,
-                fontSize: 80,
-                color: mController.colorConvert(mController.colorToShow.value),
-              ),
+              child: ShakeWidget(
+                // 4. pass the GlobalKey as an argument
+                key: shakeKey,
+                // 5. configure the animation parameters
+                shakeCount: 3,
+                shakeOffset: 10,
+                shakeDuration: Duration(milliseconds: 500),
+                child: Center(
+                  child: Stack(
+                    children: [
+                      // Implement the stroke
+                      Text(
+                        "${mController.questionText}",
+                        style: TextStyle(
+                          fontSize: 80,
+                          letterSpacing: 5,
+                          fontWeight: FontWeight.w900,
+                          foreground: Paint()
+                            ..style = PaintingStyle.stroke
+                            ..strokeWidth = 3
+                            ..color = mController.colorConvert(mController.borderColor.value),
+                        ),
+                      ),
+                      // The text inside
+                      Text("${mController.questionText}",
+                        style: TextStyle(
+                          fontWeight: FontWeight.w900,
+                          fontSize: 80,
+                          letterSpacing: 5,
+                          color: mController.colorConvert(mController.colorToShow.value),
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
               ),
             ),
-            Spacer(),
+            const Spacer(),
             GridView.builder(
               shrinkWrap: true,
               padding: const EdgeInsets.all(20),
@@ -201,7 +226,7 @@ class _WordColorGameState extends State<WordColorGame> {
                 return GestureDetector(
                   onTap: (){
                     playAudio(beepAudio);
-                    mController.onCheck(mController.option[index].colorHex);
+                    mController.onCheck(mController.option[index].colorHex, shakeKey);
                     },
                   child: Container(
                     decoration: BoxDecoration(

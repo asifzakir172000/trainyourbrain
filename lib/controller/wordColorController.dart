@@ -4,6 +4,7 @@ import 'package:get/get.dart';
 import 'package:trainyourbrain/controller/homeController.dart';
 import 'package:trainyourbrain/controller/wordColorLevelController.dart';
 import 'package:trainyourbrain/helper/audioPlayer.dart';
+import 'package:trainyourbrain/helper/constants.dart';
 import 'package:trainyourbrain/helper/storageKey.dart';
 import 'package:trainyourbrain/model/wordCOlorModel.dart';
 import 'package:trainyourbrain/model/wordColorOptionalModel.dart';
@@ -22,6 +23,7 @@ class WordColorController extends SuperController{
   var num = 0.obs;
   var wordColorModel = <WordColorModel>[].obs;
   var isComplete = false.obs;
+  var borderColor = "".obs;
 
   setUpQuestion(){
     option.clear();
@@ -35,15 +37,13 @@ class WordColorController extends SuperController{
     option.clear();
     questionText.value = wordColorModel[index.value].questionTex!;
     answer.value = wordColorModel[index.value].correctColor!;
-    colorToShow.value = wordColorModel[index.value].questionTextColor!;
+    borderColor.value = wordColorModel[index.value].questionTextColor!;
+    colorToShow.value = answer.value;
     option.addAll(wordColorModel[index.value].optionModel!);
   }
 
-  onCheck(correctAns){
-    debugPrint(correctAns);
-    debugPrint(answer.value);
+  onCheck(correctAns, shakeKey){
     if(correctAns == answer.value){
-      debugPrint("f ${answer.value}");
       index += 1;
       if(index.value < questionLen.value){
         setQuestion();
@@ -64,6 +64,8 @@ class WordColorController extends SuperController{
           isComplete.value = true;
         }
       }
+    }else{
+      shakeKey.currentState?.shake();
     }
   }
 
