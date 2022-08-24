@@ -1,7 +1,9 @@
 
+import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:trainyourbrain/helper/audioPlayer.dart';
 import 'package:trainyourbrain/helper/storageKey.dart';
+import 'package:trainyourbrain/view/language/languagePage.dart';
 
 class HomeController extends SuperController{
 
@@ -18,7 +20,6 @@ class HomeController extends SuperController{
   calculatePer(completeLevel, totalLevel){
     return completeLevel / totalLevel;
   }
-
   @override
   void onInit() {
     setData();

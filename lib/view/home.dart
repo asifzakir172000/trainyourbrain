@@ -5,7 +5,9 @@ import 'package:get/get.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:percent_indicator/linear_percent_indicator.dart';
 import 'package:trainyourbrain/controller/homeController.dart';
+import 'package:trainyourbrain/helper/image.dart';
 import 'package:trainyourbrain/model/homeData.dart';
+import 'package:trainyourbrain/view/language/languagePage.dart';
 
 class HomePage extends StatefulWidget {
   const HomePage({Key? key}) : super(key: key);
@@ -49,12 +51,39 @@ class _HomePageState extends State<HomePage> {
               child: Container(
                 height: MediaQuery.of(context).size.width/2,
                 color: Colors.amber.shade400,
-                child: Center(child: Text("Train your Brain", style: GoogleFonts.ubuntu(
-                    color: Colors.white,
-                    fontSize: 40,
-                    decoration: TextDecoration.none,
-                    fontWeight: FontWeight.w700
-                ),),),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceAround,
+                  children: [
+                    Center(child: Text("Test your Brain", style: GoogleFonts.ubuntu(
+                        color: Colors.white,
+                        fontSize: 40,
+                        decoration: TextDecoration.none,
+                        fontWeight: FontWeight.w700
+                    ),),),
+                    GestureDetector(
+                      onTap: (){
+                        playAudio(beepAudio);
+                        Get.to(()=>LanguagePage(), transition: Transition.rightToLeftWithFade,);
+                      },
+                      child: Container(
+                        height: 50,
+                        width: 50,
+                        decoration: BoxDecoration(
+                            color: Colors.white,
+                            borderRadius: BorderRadius.circular(13),
+                            boxShadow: const[
+                              BoxShadow(
+                                  color: Colors.white,
+                                  offset: Offset(6, 6),
+                                  blurRadius: 35,
+                                  spreadRadius: 0.5),
+                            ]
+                        ),
+                        child: const Icon(Icons.language, color: Colors.amber,),
+                      ),
+                    ),
+                  ],
+                ),
               ),
             ),
           ),

@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:get_storage/get_storage.dart';
+import 'package:trainyourbrain/view/language/languagekey.dart';
 import 'package:trainyourbrain/view/splash.dart';
 
 void main() async {
@@ -15,8 +16,10 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return GetMaterialApp(
-      title: 'Train Your Brain',
+      title: 'Test your Brain',
       debugShowCheckedModeBanner: false,
+      translations: LanguageKey(),
+      locale: const Locale('en', 'US'),
       theme: ThemeData(
         primarySwatch: Colors.amber,
       ),
