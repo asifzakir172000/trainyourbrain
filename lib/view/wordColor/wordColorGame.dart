@@ -4,6 +4,7 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:lottie/lottie.dart';
 import 'package:trainyourbrain/component/shakeWidget.dart';
 import 'package:trainyourbrain/controller/wordColorController.dart';
+import 'package:trainyourbrain/controller/wordColorLevelController.dart';
 import 'package:trainyourbrain/helper/audioPlayer.dart';
 import 'package:trainyourbrain/helper/image.dart';
 import 'package:trainyourbrain/model/homeData.dart';
@@ -37,7 +38,16 @@ class _WordColorGameState extends State<WordColorGame> {
               children: [
                 Lottie.asset(colorsJson),
                 Text(
-                  mController.isComplete.value ? "Congratulations You completed all level" :  "You win the Game!!\nCongratulations",
+                  mController.isComplete.value ? "You win the Game!!\nCongratulations\nCongratulations You completed all level"
+                      : mController.calculatePer() <= 30 ? "You can do it better!" : "Congratulations\nYou complete level",
+                  textAlign: TextAlign.center,
+                  style: const TextStyle(
+                      fontSize: 40,
+                      fontWeight: FontWeight.w800,
+                      color: Colors.amberAccent),
+                ),
+                 Text(
+                  "${mController.calculatePer()} / 100",
                   textAlign: TextAlign.center,
                   style: const TextStyle(
                       fontSize: 40,
@@ -51,7 +61,8 @@ class _WordColorGameState extends State<WordColorGame> {
               left: mController.isComplete.value ? MediaQuery.of(context).size.width * .3 : 0,
               right: mController.isComplete.value ? MediaQuery.of(context).size.width * .3 : 0,
               child: SizedBox(
-                child: mController.isComplete.value ? GestureDetector(
+                child: mController.isComplete.value
+                    ? GestureDetector(
                   onTap: () {
                     mController.restartGame();
                   },
@@ -66,7 +77,8 @@ class _WordColorGameState extends State<WordColorGame> {
                     margin: const EdgeInsets.only(right: 30, left: 30),
                     child: const Icon(Icons.replay, color: Colors.white, size: 28,),
                   ),
-                ) : Row(
+                )
+                    : Row(
                   mainAxisAlignment: MainAxisAlignment.spaceAround,
                   crossAxisAlignment: CrossAxisAlignment.center,
                   children: [
@@ -139,7 +151,7 @@ class _WordColorGameState extends State<WordColorGame> {
                               spreadRadius: 0.5),
                         ]
                     ),
-                    child: Icon(Icons.grid_view_rounded, color: Colors.amber,),
+                    child: const Icon(Icons.grid_view_rounded, color: Colors.amber,),
                   ),
                 ),
                 Padding(
@@ -161,7 +173,29 @@ class _WordColorGameState extends State<WordColorGame> {
                     ),
                   ),
                 ),
-                const SizedBox()
+                Padding(padding: const EdgeInsets.only(top: 10, left: 10, ), child: GestureDetector(
+                  onTap: (){
+                    playAudio(beepAudio);
+                    Get.find<WordColorLevelController>().showCustomDialog(context);
+                  },
+                  child: Container(
+                    height: 50,
+                    width: 50,
+                    decoration: BoxDecoration(
+                        color: Colors.white,
+                        borderRadius: BorderRadius.circular(13),
+                        boxShadow: const[
+                          BoxShadow(
+                              color: Colors.white,
+                              offset: Offset(6, 6),
+                              blurRadius: 35,
+                              spreadRadius: 0.5),
+                        ]
+                    ),
+                    child: const Icon(Icons.question_mark, color: Colors.amber,),
+                  ),
+                ),)
+
               ],
             ),),
             const Spacer(),
@@ -181,7 +215,7 @@ class _WordColorGameState extends State<WordColorGame> {
                 // 5. configure the animation parameters
                 shakeCount: 3,
                 shakeOffset: 10,
-                shakeDuration: Duration(milliseconds: 500),
+                shakeDuration: const Duration(milliseconds: 500),
                 child: Center(
                   child: Stack(
                     children: [
@@ -225,7 +259,6 @@ class _WordColorGameState extends State<WordColorGame> {
               itemBuilder: (BuildContext context, int index){
                 return GestureDetector(
                   onTap: (){
-                    playAudio(beepAudio);
                     mController.onCheck(mController.option[index].colorHex, shakeKey);
                     },
                   child: Container(

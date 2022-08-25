@@ -44,3 +44,7 @@ List<Map<String, dynamic>> attention = [
 playAudio(audioName){
   AudioPlayerClass.instance.play(audioName);
 }
+
+playCardAudio(audioName){
+  AudioPlayerClass.instance.playCardFlip(audioName);
+}

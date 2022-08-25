@@ -7,16 +7,16 @@ import 'package:get/get.dart';
 import 'package:trainyourbrain/controller/cardLevelController.dart';
 import 'package:trainyourbrain/controller/homeController.dart';
 import 'package:trainyourbrain/helper/audioPlayer.dart';
+import 'package:trainyourbrain/helper/image.dart';
 import 'package:trainyourbrain/helper/storageKey.dart';
+import 'package:trainyourbrain/model/homeData.dart';
 import 'package:trainyourbrain/view/card/cardData.dart';
 
 class CardFlipController extends SuperController{
   var previousIndex = -1.obs;
   var flip = false.obs;
-  var start = false.obs;
+  var start = true.obs;
   var wait = false.obs;
-  Timer? timer;
-  var time = 0.obs;
   var left = 3.obs;
   var isFinished = false.obs;
   var isComplete = false.obs;
@@ -27,25 +27,15 @@ class CardFlipController extends SuperController{
   var num = 0.obs;
 
 
-
-  void startTimer() {
-    timer = Timer.periodic(const Duration(seconds: 1), (t) {
-      time.value = time.value - 1;
-    });
-  }
-
   void restart(){
-    startTimer();
     data.value = getSourceArray(num.value);
     cardFlips.value = getInitialItemState(num.value);
     cardStateKeys.value = getCardStateKeys(num.value);
-    time.value = 3;
     left.value = (data.length ~/ 2);
     isFinished.value = false;
-    Future.delayed(const Duration(seconds: 3), () {
-      start.value = true;
-      timer!.cancel();
-      debugPrint("2: ${start.value}");
+    start.value = true;
+    Future.delayed(const Duration(seconds: 4), () {
+      start.value = false;
     });
   }
 
@@ -56,6 +46,7 @@ class CardFlipController extends SuperController{
   }
 
   onFlip(index){
+    playCardAudio(cardFlipAudio);
     if (!flip.value) {
       flip.value = true;
       previousIndex= index;
@@ -64,6 +55,7 @@ class CardFlipController extends SuperController{
       if (previousIndex != index) {
         if (data[previousIndex] !=
             data[index]) {
+          playAudio(clickAudio);
           wait.value = true;
           Future.delayed(
               const Duration(milliseconds: 200),
@@ -84,6 +76,7 @@ class CardFlipController extends SuperController{
                           wait.value = false;
                     });
               });
+          // playAudio(beepAudio);
         } else {
           cardFlips[previousIndex] = false;
           cardFlips[index] = false;
@@ -124,7 +117,6 @@ class CardFlipController extends SuperController{
 
   @override
   void dispose() {
-    timer!.cancel();
     super.dispose();
   }
 

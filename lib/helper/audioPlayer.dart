@@ -9,23 +9,30 @@ class AudioPlayerClass {
   static AudioPlayerClass get instance => _instance;
   AudioPlayer audioPlayer = AudioPlayer();
   AudioPlayer bgPlayer = AudioPlayer();
+  AudioPlayer cardFlipPlayer = AudioPlayer();
 
   play(filename){
-    debugPrint("file name: $filename");
     audioPlayer.setAsset(filename);
     audioPlayer.play();
     audioPlayer.loopMode;
   }
 
+  playCardFlip(filename){
+    cardFlipPlayer.setAsset(filename);
+    cardFlipPlayer.play();
+    cardFlipPlayer.loopMode;
+    // cardFlipPlayer.dispose();
+  }
+
   playBg(filename){
     bgPlayer.setAsset(filename);
-    bgPlayer.setVolume(0.02);
+    bgPlayer.setVolume(0.2);
     bgPlayer.play();
     bgPlayer.setLoopMode(LoopMode.all);
   }
 
   dismiss(){
-    audioPlayer.dispose();
+    audioPlayer.stop();
   }
 
   dismissBgPlayer(){

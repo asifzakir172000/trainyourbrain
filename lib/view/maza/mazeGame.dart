@@ -2,9 +2,12 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:lottie/lottie.dart';
 import 'package:maze/maze.dart';
+import 'package:trainyourbrain/component/timeCountDown.dart';
+import 'package:trainyourbrain/controller/findPathLevelController.dart';
 import 'package:trainyourbrain/controller/mazeController.dart';
 import 'package:trainyourbrain/helper/audioPlayer.dart';
 import 'package:trainyourbrain/helper/image.dart';
+import 'package:trainyourbrain/model/homeData.dart';
 
 class MazeGame extends StatefulWidget {
   const MazeGame({Key? key}) : super(key: key);
@@ -155,13 +158,38 @@ class _MazeGameState extends State<MazeGame>{
                         ),
                       ),
                     ),
-                    const SizedBox(
-                      width: 50,
-                    ),
+                    mController.start.value ? const SizedBox() : Padding(
+                        padding: const EdgeInsets.only(top: 10, right: 10),
+                      child: GestureDetector(
+                        onTap: (){
+                          playAudio(beepAudio);
+                          Get.find<FindPathLevelController>().showCustomDialog(context);
+                        },
+                        child: Container(
+                          height: 50,
+                          width: 50,
+                          decoration: BoxDecoration(
+                              color: Colors.white,
+                              borderRadius: BorderRadius.circular(13),
+                              boxShadow: const[
+                                BoxShadow(
+                                    color: Colors.white,
+                                    offset: Offset(6, 6),
+                                    blurRadius: 35,
+                                    spreadRadius: 0.5),
+                              ]
+                          ),
+                          child: const Icon(Icons.question_mark, color: Colors.amber,),
+                        ),
+                      ),
+                    )
                   ],
                 ),),
                 Obx((){
-                  return Padding(
+                  return mController.start.value ? TimeCountDown(
+                    height: MediaQuery.of(context).size.height / 2,
+                    width: MediaQuery.of(context).size.width / 2,
+                  ) : Padding(
                     padding: const EdgeInsets.only(left: 10, right: 10, top: 10),
                     child: Maze(
                       height: MediaQuery.of(context).size.height * .8,

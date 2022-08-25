@@ -4,18 +4,18 @@ import 'dart:async';
 import 'package:flip_card/flip_card.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:get_storage/get_storage.dart';
 import 'package:trainyourbrain/controller/findNewLevelController.dart';
 import 'package:trainyourbrain/controller/homeController.dart';
 import 'package:trainyourbrain/helper/audioPlayer.dart';
+import 'package:trainyourbrain/helper/image.dart';
 import 'package:trainyourbrain/helper/storageKey.dart';
+import 'package:trainyourbrain/model/homeData.dart';
 import 'package:trainyourbrain/view/findNew/findNewData.dart';
 
 class FindNewController extends SuperController{
 
   var start = false.obs;
-  // var wait = false.obs;
-  Timer? timer;
-  var time = 0.obs;
   var left = 3.obs;
   var isFinished = false.obs;
   var data = <String>[].obs;
@@ -23,53 +23,55 @@ class FindNewController extends SuperController{
   var isSelected = <bool>[].obs;
   var cardStateKeys = <GlobalKey<FlipCardState>>[].obs;
   var answerData = <String>[].obs;
-  late int showCardLen;
+  var showCardLen = 0.obs;
   var level = 0.obs;
   var num = 0.obs;
   var isComplete = false.obs;
-
-
-
-  void startTimer() {
-    timer = Timer.periodic(const Duration(seconds: 1), (t) {
-      time.value = time.value - 1;
-    });
-  }
+  var notComplete = false;
+  int clickCount = 0;
+  var isCorrectCount = 0.obs;
+  var correctIndex = <int>[].obs;
+  var inCorrectIndex = <int>[].obs;
 
   cleanData(){
     data.clear();
     showData.clear();
     isSelected.clear();
     answerData.clear();
-    time = 0.obs;
     left = 3.obs;
     start = false.obs;
   }
 
   void restartGame(){
     cleanData();
-    startTimer();
-    debugPrint("numfrom $num");
-    debugPrint("showCardLen $showCardLen");
+    correctIndex.clear();
+    inCorrectIndex.clear();
+    isCorrectCount.value = 0;
+    clickCount = 0;
     data.value = getFindNewSourceArray(num.value);
-    showData.value = getFindNewShowItemState(showCardLen, data.value);
+    showData.value = getFindNewShowItemState(showCardLen.value, data);
     isSelected.value = getFindNewSelectedItemState(showData.length);
-    time.value = 3;
+    start.value = false;
     left.value = (data.length ~/ 2);
     isFinished.value = false;
-    debugPrint("1: ${start.value}");
     Future.delayed(const Duration(seconds: 3), () {
       start.value = true;
-      timer!.cancel();
     });
   }
 
   onNewItemCheck(index){
+    clickCount += 1;
     if(!data.contains(showData[index]) && !answerData.contains(showData[index])){
-      answerData.add(showData[index]);
       isSelected[index] = true;
+      isCorrectCount += 1;
+      correctIndex.add(index);
+      playCardAudio(wrongAudio);
+    }else{
+      isSelected[index] = true;
+      inCorrectIndex.add(index);
+      playCardAudio(thunderAudio);
     }
-    if(answerData.length == showCardLen){
+    if(clickCount == showCardLen.value && isCorrectCount.value == showCardLen.value){
       var levelP = StorageKey.instance.getStorage(key: StorageKey.findNew)??0;
       if(levelP < level.value){
         StorageKey.instance.setStorage(key: StorageKey.findNew, msg: level.value);
@@ -84,25 +86,37 @@ class FindNewController extends SuperController{
          isComplete.value = true;
        }
      });
+    }else if(clickCount == showCardLen.value){
+      Future.delayed(const Duration(milliseconds: 500), (){
+        notComplete = true;
+        isFinished.value = true;
+        if(level.value == 5){
+          isComplete.value = true;
+        }
+      });
     }
   }
 
   onNextLevel(levelC){
-    num.value = levelC >= 2 ? 3 : 2;
-    if(levelC >= 2 && levelC <= 3){
-      showCardLen = 2;
-    }else if(levelC >= 4 ){
-      showCardLen = 3;
+    if(notComplete){
+      restartGame();
+    }else{
+      num.value = levelC >= 2 ? 3 : 2;
+      if(levelC >= 2 && levelC <= 3){
+        showCardLen.value = 2;
+      }else if(levelC >= 4 ){
+        showCardLen.value = 3;
+      }
+      level.value = levelC + 1;
+      restartGame();
     }
-    level.value = levelC + 1;
-    restartGame();
   }
 
 
   @override
   void onInit() {
     num.value = Get.arguments["num"]!;
-    showCardLen = Get.arguments["showCard"]!;
+    showCardLen.value = Get.arguments["showCard"]!;
     level.value = Get.arguments["level"]!;
     restartGame();
     super.onInit();
@@ -110,7 +124,6 @@ class FindNewController extends SuperController{
 
   @override
   void dispose() {
-    timer!.cancel();
     super.dispose();
   }
 

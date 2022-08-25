@@ -5,7 +5,9 @@ import 'package:trainyourbrain/controller/homeController.dart';
 import 'package:trainyourbrain/controller/wordColorLevelController.dart';
 import 'package:trainyourbrain/helper/audioPlayer.dart';
 import 'package:trainyourbrain/helper/constants.dart';
+import 'package:trainyourbrain/helper/image.dart';
 import 'package:trainyourbrain/helper/storageKey.dart';
+import 'package:trainyourbrain/model/homeData.dart';
 import 'package:trainyourbrain/model/wordCOlorModel.dart';
 import 'package:trainyourbrain/model/wordColorOptionalModel.dart';
 import 'package:trainyourbrain/view/wordColor/wordColorData.dart';
@@ -24,6 +26,7 @@ class WordColorController extends SuperController{
   var wordColorModel = <WordColorModel>[].obs;
   var isComplete = false.obs;
   var borderColor = "".obs;
+  var correctAnsCount = 0.obs;
 
   setUpQuestion(){
     option.clear();
@@ -42,42 +45,60 @@ class WordColorController extends SuperController{
     option.addAll(wordColorModel[index.value].optionModel!);
   }
 
+  calculatePer(){
+    return ((correctAnsCount.value / questionLen.value) * 100).round();
+  }
+
+  gameFinish(){
+    var levelP = StorageKey.instance.getStorage(key: StorageKey.wordColor)??0;
+    if(levelP < level.value){
+      StorageKey.instance.setStorage(key: StorageKey.wordColor, msg: level.value);
+      var per = StorageKey.instance.getStorage(key: StorageKey.attentionPer)??0.0;
+      StorageKey.instance.setStorage(key: StorageKey.attentionPer, msg: per + 1);
+      Get.find<WordColorLevelController>().getData();
+      Get.find<HomeController>().setData();
+    }
+    index.value = 0;
+    isFinish.value = true;
+    if(level.value == 5){
+      isComplete.value = true;
+    }
+  }
+
   onCheck(correctAns, shakeKey){
     if(correctAns == answer.value){
+      playCardAudio(wrongAudio);
+      correctAnsCount += 1;
       index += 1;
       if(index.value < questionLen.value){
         setQuestion();
       }else{
-        debugPrint("fs ${level.value}");
-        var levelP = StorageKey.instance.getStorage(key: StorageKey.wordColor)??0;
-        if(levelP < level.value){
-          debugPrint("fss $levelP");
-          StorageKey.instance.setStorage(key: StorageKey.wordColor, msg: level.value);
-          var per = StorageKey.instance.getStorage(key: StorageKey.attentionPer)??0.0;
-          StorageKey.instance.setStorage(key: StorageKey.attentionPer, msg: per + 1);
-          Get.find<WordColorLevelController>().getData();
-          Get.find<HomeController>().setData();
-        }
-        index.value = 0;
-        isFinish.value = true;
-        if(level.value == 5){
-          isComplete.value = true;
-        }
+        gameFinish();
       }
     }else{
+      playCardAudio(thunderAudio);
       shakeKey.currentState?.shake();
+      index += 1;
+      if(index.value < questionLen.value){
+        setQuestion();
+      }
+      if(index.value == questionLen.value){
+        gameFinish();
+      }
     }
   }
 
   onNextLevel(){
     level += 1;
     num.value = level.value >= 2 ? 6 : 10;
+    correctAnsCount.value = 0;
     setUpQuestion();
     isFinish.value = false;
   }
 
   restartGame(){
     index.value = 0;
+    correctAnsCount.value = 0;
     isFinish.value = false;
     setUpQuestion();
   }

@@ -1,9 +1,13 @@
+import 'package:circular_countdown_timer/circular_countdown_timer.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:lottie/lottie.dart';
+import 'package:trainyourbrain/component/timeCountDown.dart';
 import 'package:trainyourbrain/controller/findNewController.dart';
+import 'package:trainyourbrain/controller/findNewLevelController.dart';
 import 'package:trainyourbrain/helper/audioPlayer.dart';
 import 'package:trainyourbrain/helper/image.dart';
+import 'package:trainyourbrain/model/homeData.dart';
 
 class FindNewGame extends StatefulWidget {
   const FindNewGame({Key? key}) : super(key: key);
@@ -62,7 +66,8 @@ class _FindNewGameState extends State<FindNewGame> {
               padding: const EdgeInsets.all(10.0),
               child: Image.asset(mController.showData[index]),
             ),
-            Obx(() => Visibility(visible: mController.isSelected[index], child: Image.asset(checkMarkImage),),)
+            Obx(() => Visibility(visible: mController.inCorrectIndex.contains(index), child: Image.asset(crossMarkImage),),),
+            Obx(() => Visibility(visible: mController.correctIndex.contains(index), child: Image.asset(checkMarkImage),),)
           ],
         ),
       ),
@@ -84,8 +89,8 @@ class _FindNewGameState extends State<FindNewGame> {
               Align(
                 alignment: Alignment.center,
                 child: Text(
-                  mController.isComplete.value ? "Congratulations You completed all level" :  "You win the Game!!\nCongratulations",
-                  textAlign: TextAlign.center,
+                  mController.isComplete.value ? "You win the Game!!\nCongratulations\nCongratulations You completed all level"
+                      : mController.isCorrectCount.value < mController.showCardLen.value ? "You can do it better!" : "Congratulations\nYou complete level",textAlign: TextAlign.center,
                   style: const TextStyle(
                       fontSize: 40,
                       fontWeight: FontWeight.w800,
@@ -212,15 +217,30 @@ class _FindNewGameState extends State<FindNewGame> {
                     ),
                     Padding(
                       padding: const EdgeInsets.only(top: 10, right: 10, ),
-                      child: mController.time.value > 0
-                          ? Text(
-                        '${mController.time.value}',
-                        style: const TextStyle(
-                            fontSize: 38,
-                            fontWeight: FontWeight.bold,
-                            color: Colors.white),
-                      )
-                          : null,
+                      child: !mController.start.value
+                          ? const TimeCountDown()
+                          : GestureDetector(
+                        onTap: (){
+                          playAudio(beepAudio);
+                          Get.find<FindNewLevelController>().showCustomDialog(context);
+                        },
+                        child: Container(
+                          height: 50,
+                          width: 50,
+                          decoration: BoxDecoration(
+                              color: Colors.white,
+                              borderRadius: BorderRadius.circular(13),
+                              boxShadow: const[
+                                BoxShadow(
+                                    color: Colors.white,
+                                    offset: Offset(6, 6),
+                                    blurRadius: 35,
+                                    spreadRadius: 0.5),
+                              ]
+                          ),
+                          child: const Icon(Icons.question_mark, color: Colors.amber,),
+                        ),
+                      ),
                     ),
                   ],
                 ),),

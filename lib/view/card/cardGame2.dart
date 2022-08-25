@@ -1,10 +1,15 @@
+import 'package:circular_countdown_timer/circular_countdown_timer.dart';
 import 'package:flip_card/flip_card.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:lottie/lottie.dart';
+import 'package:percent_indicator/circular_percent_indicator.dart';
+import 'package:trainyourbrain/component/timeCountDown.dart';
 import 'package:trainyourbrain/controller/cardFlipController.dart';
+import 'package:trainyourbrain/controller/cardLevelController.dart';
 import 'package:trainyourbrain/helper/audioPlayer.dart';
 import 'package:trainyourbrain/helper/image.dart';
+import 'package:trainyourbrain/model/homeData.dart';
 
 class FlipCardTwoScreen extends StatefulWidget {
 
@@ -165,13 +170,6 @@ class _FlipCardScreenState extends State<FlipCardTwoScreen> {
                         decoration: BoxDecoration(
                           color: Colors.white,
                           borderRadius: BorderRadius.circular(13),
-                          // boxShadow: const[
-                          //   BoxShadow(
-                          //       color: Colors.white,
-                          //       offset: Offset(6, 6),
-                          //       blurRadius: 35,
-                          //       spreadRadius: 0.5),
-                          // ]
                         ),
                         child: Padding(
                           padding: const EdgeInsets.all(8.0),
@@ -187,20 +185,36 @@ class _FlipCardScreenState extends State<FlipCardTwoScreen> {
                     ),
                     Padding(
                       padding: const EdgeInsets.only(top: 10, right: 10, ),
-                      child: mController.time.value > 0
-                          ? Text(
-                        '${mController.time.value}',
-                        style: const TextStyle(
-                            fontSize: 38,
-                            fontWeight: FontWeight.bold,
-                            color: Colors.white),
-                      )
-                          : null,
+                      child: mController.start.value
+                          ? const TimeCountDown()
+                          : GestureDetector(
+                        onTap: (){
+                          playAudio(beepAudio);
+                          Get.find<CardLevelController>().showCustomDialog(context);
+                        },
+                        child: Container(
+                          height: 50,
+                          width: 50,
+                          decoration: BoxDecoration(
+                              color: Colors.white,
+                              borderRadius: BorderRadius.circular(13),
+                              boxShadow: const[
+                                BoxShadow(
+                                    color: Colors.white,
+                                    offset: Offset(6, 6),
+                                    blurRadius: 35,
+                                    spreadRadius: 0.5),
+                              ]
+                          ),
+                          child: const Icon(Icons.question_mark, color: Colors.amber,),
+                        ),
+                      ),
                     ),
                   ],
                 ),),
                 Obx((){
-                  return mController.start.value ? Padding(
+                  return !mController.start.value
+                      ? Padding(
                     padding: const EdgeInsets.only(top:40, left: 20, right: 20, bottom: 20),
                     child: GridView.builder(
                       shrinkWrap: true,

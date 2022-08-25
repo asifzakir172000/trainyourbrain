@@ -6,7 +6,9 @@ import 'package:get/get.dart';
 import 'package:trainyourbrain/controller/findPathLevelController.dart';
 import 'package:trainyourbrain/controller/homeController.dart';
 import 'package:trainyourbrain/helper/audioPlayer.dart';
+import 'package:trainyourbrain/helper/image.dart';
 import 'package:trainyourbrain/helper/storageKey.dart';
+import 'package:trainyourbrain/model/homeData.dart';
 import 'package:trainyourbrain/view/maza/mazeData.dart';
 
 class MazeController extends SuperController{
@@ -16,9 +18,11 @@ class MazeController extends SuperController{
   var isFinished = false.obs;
   var level = 0.obs;
   var isComplete = false.obs;
+  var start = true.obs;
 
 
   onFinishGame(){
+    playCardAudio(wrongAudio);
     var levelP = StorageKey.instance.getStorage(key: StorageKey.findPath)??0;
     if(levelP < level.value){
       debugPrint(levelP.toString());
@@ -41,6 +45,7 @@ class MazeController extends SuperController{
   }
 
   onRestartGame(){
+    startGame();
     cleanData();
   }
 
@@ -50,6 +55,18 @@ class MazeController extends SuperController{
     columns.value = levelC <= 1 ? mazeData[levelC]["column"] : Random().nextInt(10) + 10;
     level.value = levelC + 1;
     cleanData();
+    startGame();
+  }
+
+  @override
+  InternalFinalCallback<void> get onStart => super.onStart;
+
+
+  startGame(){
+    start.value = true;
+    Future.delayed(const Duration(seconds: 4), () {
+      start.value = false;
+    });
   }
 
   @override
@@ -57,6 +74,7 @@ class MazeController extends SuperController{
     rows.value = Get.arguments["rows"]??12;
     columns.value = Get.arguments["columns"]??12;
     level.value = Get.arguments["level"]??0;
+    startGame();
     super.onInit();
   }
 
