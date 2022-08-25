@@ -133,68 +133,29 @@ class _FlipCardScreenState extends State<FlipCardTwoScreen> {
       )
           : Scaffold(
         backgroundColor: Colors.amber.shade400,
-        body: SafeArea(
-          child: SingleChildScrollView(
-            child: Column(
-              children: <Widget>[
-                Padding(padding: const EdgeInsets.only(left: 10, right: 10), child: Row(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    GestureDetector(
-                      onTap: (){
-                        AudioPlayerClass.instance.play(beepAudio);
-                        Get.back();
-                      },
-                      child: Container(
-                        height: 50,
-                        width: 50,
-                        margin: const EdgeInsets.only(top: 10, left: 10, ),
-                        decoration: BoxDecoration(
-                            color: Colors.white,
-                            borderRadius: BorderRadius.circular(13),
-                            boxShadow: const[
-                              BoxShadow(
-                                  color: Colors.white,
-                                  offset: Offset(6, 6),
-                                  blurRadius: 35,
-                                  spreadRadius: 0.5),
-                            ]
-                        ),
-                        child: const Icon(Icons.grid_view_rounded, color: Colors.amber,),
-                      ),
-                    ),
-                    Padding(
-                      padding: const EdgeInsets.only(top: 10, left: 10, ),
-                      child: Container(
-                        decoration: BoxDecoration(
-                          color: Colors.white,
-                          borderRadius: BorderRadius.circular(13),
-                        ),
-                        child: Padding(
-                          padding: const EdgeInsets.all(8.0),
-                          child: Text(
-                            'Level ${mController.level.value}',
-                            style: const TextStyle(
-                                fontSize: 38,
-                                fontWeight: FontWeight.bold,
-                                color: Colors.amber),
-                          ),
-                        ),
-                      ),
-                    ),
-                    Padding(
-                      padding: const EdgeInsets.only(top: 10, right: 10, ),
-                      child: mController.start.value
-                          ? const TimeCountDown()
-                          : GestureDetector(
+        body: WillPopScope(
+          onWillPop: ()async{
+            AudioPlayerClass.instance.dismiss();
+            Get.back();
+            return false;
+          },
+          child: SafeArea(
+            child: SingleChildScrollView(
+              child: Column(
+                children: <Widget>[
+                  Padding(padding: const EdgeInsets.only(left: 10, right: 10), child: Row(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      GestureDetector(
                         onTap: (){
-                          playAudio(beepAudio);
-                          Get.find<CardLevelController>().showCustomDialog(context);
+                          AudioPlayerClass.instance.play(beepAudio);
+                          Get.back();
                         },
                         child: Container(
                           height: 50,
                           width: 50,
+                          margin: const EdgeInsets.only(top: 10, left: 10, ),
                           decoration: BoxDecoration(
                               color: Colors.white,
                               borderRadius: BorderRadius.circular(13),
@@ -206,68 +167,114 @@ class _FlipCardScreenState extends State<FlipCardTwoScreen> {
                                     spreadRadius: 0.5),
                               ]
                           ),
-                          child: const Icon(Icons.question_mark, color: Colors.amber,),
+                          child: const Icon(Icons.grid_view_rounded, color: Colors.amber,),
                         ),
                       ),
-                    ),
-                  ],
-                ),),
-                Obx((){
-                  return !mController.start.value
-                      ? Padding(
-                    padding: const EdgeInsets.only(top:40, left: 20, right: 20, bottom: 20),
-                    child: GridView.builder(
-                      shrinkWrap: true,
-                      physics: const NeverScrollableScrollPhysics(),
-                      gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-                        crossAxisCount: 2,
-                      ),
-                      itemBuilder: (context, index) => FlipCard(
-                          key: mController.cardStateKeys[index],
-                          onFlip: () {
-                            mController.onFlip(index);
-                          },
-                          speed: 100,
-                          flipOnTouch: mController.wait.value ? false : mController.cardFlips[index],
-                          direction: FlipDirection.HORIZONTAL,
-                          front: Container(
-                            decoration: BoxDecoration(
-                                color: Colors.white,
-                                borderRadius: BorderRadius.circular(5),
-                                boxShadow: const [
-                                  BoxShadow(
-                                    color: Colors.grey,
-                                    blurRadius: 3,
-                                    spreadRadius: 0.8,
-                                    offset: Offset(2.0, 1),
-                                  )
-                                ]),
-                            margin: const EdgeInsets.all(4.0),
-                            child: Padding(
-                              padding: const EdgeInsets.all(8.0),
-                              child: Image.asset(
-                                questionMarkImage,
-                                fit: BoxFit.fill,
-                              ),
+                      Padding(
+                        padding: const EdgeInsets.only(top: 10, left: 10, ),
+                        child: Container(
+                          decoration: BoxDecoration(
+                            color: Colors.white,
+                            borderRadius: BorderRadius.circular(13),
+                          ),
+                          child: Padding(
+                            padding: const EdgeInsets.all(8.0),
+                            child: Text(
+                              'Level ${mController.level.value}',
+                              style: const TextStyle(
+                                  fontSize: 38,
+                                  fontWeight: FontWeight.bold,
+                                  color: Colors.amber),
                             ),
                           ),
-                          back: getItem(index)),
-                      itemCount: mController.data.length,
-                    ),
-                  ) : Padding(
-                    padding: const EdgeInsets.only(top:40, left: 20, right: 20, bottom: 20),
-                    child: GridView.builder(
-                      shrinkWrap: true,
-                      physics: const NeverScrollableScrollPhysics(),
-                      gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-                        crossAxisCount: 2,
+                        ),
                       ),
-                      itemBuilder: (context, index) => getItem(index),
-                      itemCount: mController.data.length,
-                    ),
-                  );
-                  }),
-              ],
+                      Padding(
+                        padding: const EdgeInsets.only(top: 10, right: 10, ),
+                        child: mController.start.value
+                            ? const TimeCountDown()
+                            : GestureDetector(
+                          onTap: (){
+                            playAudio(beepAudio);
+                            Get.find<CardLevelController>().showCustomDialog(context);
+                          },
+                          child: Container(
+                            height: 50,
+                            width: 50,
+                            decoration: BoxDecoration(
+                                color: Colors.white,
+                                borderRadius: BorderRadius.circular(13),
+                                boxShadow: const[
+                                  BoxShadow(
+                                      color: Colors.white,
+                                      offset: Offset(6, 6),
+                                      blurRadius: 35,
+                                      spreadRadius: 0.5),
+                                ]
+                            ),
+                            child: const Icon(Icons.question_mark, color: Colors.amber,),
+                          ),
+                        ),
+                      ),
+                    ],
+                  ),),
+                  Obx((){
+                    return !mController.start.value
+                        ? Padding(
+                      padding: const EdgeInsets.only(top:40, left: 20, right: 20, bottom: 20),
+                      child: GridView.builder(
+                        shrinkWrap: true,
+                        physics: const NeverScrollableScrollPhysics(),
+                        gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+                          crossAxisCount: 2,
+                        ),
+                        itemBuilder: (context, index) => FlipCard(
+                            key: mController.cardStateKeys[index],
+                            onFlip: () {
+                              mController.onFlip(index);
+                            },
+                            speed: 100,
+                            flipOnTouch: mController.wait.value ? false : mController.cardFlips[index],
+                            direction: FlipDirection.HORIZONTAL,
+                            front: Container(
+                              decoration: BoxDecoration(
+                                  color: Colors.white,
+                                  borderRadius: BorderRadius.circular(5),
+                                  boxShadow: const [
+                                    BoxShadow(
+                                      color: Colors.grey,
+                                      blurRadius: 3,
+                                      spreadRadius: 0.8,
+                                      offset: Offset(2.0, 1),
+                                    )
+                                  ]),
+                              margin: const EdgeInsets.all(4.0),
+                              child: Padding(
+                                padding: const EdgeInsets.all(8.0),
+                                child: Image.asset(
+                                  questionMarkImage,
+                                  fit: BoxFit.fill,
+                                ),
+                              ),
+                            ),
+                            back: getItem(index)),
+                        itemCount: mController.data.length,
+                      ),
+                    ) : Padding(
+                      padding: const EdgeInsets.only(top:40, left: 20, right: 20, bottom: 20),
+                      child: GridView.builder(
+                        shrinkWrap: true,
+                        physics: const NeverScrollableScrollPhysics(),
+                        gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+                          crossAxisCount: 2,
+                        ),
+                        itemBuilder: (context, index) => getItem(index),
+                        itemCount: mController.data.length,
+                      ),
+                    );
+                    }),
+                ],
+              ),
             ),
           ),
         ),

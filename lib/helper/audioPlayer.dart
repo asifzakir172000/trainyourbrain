@@ -12,9 +12,13 @@ class AudioPlayerClass {
   AudioPlayer cardFlipPlayer = AudioPlayer();
 
   play(filename){
+    audioPlayer = AudioPlayer();
     audioPlayer.setAsset(filename);
     audioPlayer.play();
     audioPlayer.loopMode;
+    Future.delayed(const Duration(seconds: 8),(){
+      audioPlayer.dispose();
+    });
   }
 
   playCardFlip(filename){

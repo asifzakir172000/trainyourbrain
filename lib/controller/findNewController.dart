@@ -15,7 +15,7 @@ import 'package:trainyourbrain/view/findNew/findNewData.dart';
 
 class FindNewController extends SuperController{
 
-  var start = false.obs;
+  var start = true.obs;
   var left = 3.obs;
   var isFinished = false.obs;
   var data = <String>[].obs;
@@ -39,7 +39,7 @@ class FindNewController extends SuperController{
     isSelected.clear();
     answerData.clear();
     left = 3.obs;
-    start = false.obs;
+    start = true.obs;
   }
 
   void restartGame(){
@@ -51,11 +51,11 @@ class FindNewController extends SuperController{
     data.value = getFindNewSourceArray(num.value);
     showData.value = getFindNewShowItemState(showCardLen.value, data);
     isSelected.value = getFindNewSelectedItemState(showData.length);
-    start.value = false;
+    start.value = true;
     left.value = (data.length ~/ 2);
     isFinished.value = false;
-    Future.delayed(const Duration(seconds: 3), () {
-      start.value = true;
+    Future.delayed(const Duration(seconds: 4), () {
+      start.value = false;
     });
   }
 
@@ -124,6 +124,7 @@ class FindNewController extends SuperController{
 
   @override
   void dispose() {
+    AudioPlayerClass.instance.dismiss();
     super.dispose();
   }
 

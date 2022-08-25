@@ -38,6 +38,11 @@ class MazeController extends SuperController{
   }
 
   cleanData(){
+    start.value = true;
+    Future.delayed(const Duration(seconds: 4), () {
+      start.value = false;
+      AudioPlayerClass.instance.dismiss();
+    });
      isFinished.value = false;
      if(level.value == 5){
        isComplete.value = true;
@@ -45,36 +50,25 @@ class MazeController extends SuperController{
   }
 
   onRestartGame(){
-    startGame();
     cleanData();
   }
 
   nextLevel(levelC){
-    debugPrint('$levelC');
     rows.value = levelC <= 1 ? mazeData[levelC]["row"] : Random().nextInt(10) + 10;
     columns.value = levelC <= 1 ? mazeData[levelC]["column"] : Random().nextInt(10) + 10;
     level.value = levelC + 1;
     cleanData();
-    startGame();
   }
 
   @override
   InternalFinalCallback<void> get onStart => super.onStart;
-
-
-  startGame(){
-    start.value = true;
-    Future.delayed(const Duration(seconds: 4), () {
-      start.value = false;
-    });
-  }
 
   @override
   void onInit() {
     rows.value = Get.arguments["rows"]??12;
     columns.value = Get.arguments["columns"]??12;
     level.value = Get.arguments["level"]??0;
-    startGame();
+    cleanData();
     super.onInit();
   }
 
@@ -96,6 +90,12 @@ class MazeController extends SuperController{
   @override
   void onResumed() {
     AudioPlayerClass.instance.restartBg();
+  }
+
+  @override
+  void dispose() {
+    AudioPlayerClass.instance.dismiss();
+    super.dispose();
   }
 
 }

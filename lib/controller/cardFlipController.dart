@@ -117,6 +117,7 @@ class CardFlipController extends SuperController{
 
   @override
   void dispose() {
+    AudioPlayerClass.instance.dismiss();
     super.dispose();
   }
 

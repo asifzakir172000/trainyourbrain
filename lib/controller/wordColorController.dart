@@ -27,6 +27,7 @@ class WordColorController extends SuperController{
   var isComplete = false.obs;
   var borderColor = "".obs;
   var correctAnsCount = 0.obs;
+  var start = true.obs;
 
   setUpQuestion(){
     option.clear();
@@ -34,6 +35,10 @@ class WordColorController extends SuperController{
     wordColorModel.value = getWordColorModelData(num.value);
     questionLen.value = wordColorModel.length;
     setQuestion();
+    start.value = true;
+    Future.delayed(const Duration(seconds: 4),(){
+      start.value = false;
+    });
   }
 
   setQuestion(){
@@ -141,5 +146,11 @@ class WordColorController extends SuperController{
   @override
   void onResumed() {
     AudioPlayerClass.instance.restartBg();
+  }
+
+  @override
+  void dispose() {
+    AudioPlayerClass.instance.dismiss();
+    super.dispose();
   }
 }
