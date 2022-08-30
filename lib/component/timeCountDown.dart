@@ -31,7 +31,7 @@ class TimeCountDown extends StatelessWidget {
         textFormat: CountdownTextFormat.S,
         isTimerTextShown: true,
         textStyle: const TextStyle(
-            fontSize: 30,
+            fontSize: 25,
             fontWeight: FontWeight.bold,
             color: Colors.white),
         onStart: () {

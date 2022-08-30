@@ -125,7 +125,6 @@ class _CardLevelState extends State<CardLevel> {
                   itemBuilder: (BuildContext context, int index){
                     return GestureDetector(
                       onTap: (){
-                        playAudio(clickAudio);
                         if(mController.checkLevel(index+1)){
                           var num = index >= 2 ? 6 : 4;
                           Get.to(() => const FlipCardTwoScreen(), transition: Transition.rightToLeftWithFade, arguments: {

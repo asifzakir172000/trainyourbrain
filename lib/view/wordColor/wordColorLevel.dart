@@ -122,7 +122,6 @@ class _WordColorLevelState extends State<WordColorLevel> {
                   itemBuilder: (BuildContext context, int index){
                     return GestureDetector(
                       onTap: (){
-                        playAudio(clickAudio);
                         if(mController.checkLevel(index+1)) {
                           var num = index >= 2 ? 3 : 6;
                           Get.to(() => const WordColorGame(),

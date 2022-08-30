@@ -19,6 +19,8 @@ class MazeController extends SuperController{
   var level = 0.obs;
   var isComplete = false.obs;
   var start = true.obs;
+  var timeLimits = 30.obs;
+  var isRetry = false.obs;
 
 
   onFinishGame(){
@@ -34,7 +36,7 @@ class MazeController extends SuperController{
       Get.find<HomeController>().setData();
     }
     isFinished.value = true;
-    debugPrint('Hi from finish line!');
+    isRetry.value = false;
   }
 
   cleanData(){
@@ -44,6 +46,7 @@ class MazeController extends SuperController{
       AudioPlayerClass.instance.dismiss();
     });
      isFinished.value = false;
+    isRetry.value = false;
      if(level.value == 5){
        isComplete.value = true;
      }
@@ -57,7 +60,17 @@ class MazeController extends SuperController{
     rows.value = levelC <= 1 ? mazeData[levelC]["row"] : Random().nextInt(10) + 10;
     columns.value = levelC <= 1 ? mazeData[levelC]["column"] : Random().nextInt(10) + 10;
     level.value = levelC + 1;
+    if(level >= 3){
+      timeLimits.value = 60;
+    }else{
+      timeLimits.value = 30;
+    }
     cleanData();
+  }
+
+  isFinish(){
+    isFinished.value = true;
+    isRetry.value = true;
   }
 
   @override
@@ -67,7 +80,10 @@ class MazeController extends SuperController{
   void onInit() {
     rows.value = Get.arguments["rows"]??12;
     columns.value = Get.arguments["columns"]??12;
-    level.value = Get.arguments["level"]??0;
+    level.value = Get.arguments["level"]??1;
+    if(level <= 3){
+      timeLimits.value = 60;
+    }
     cleanData();
     super.onInit();
   }

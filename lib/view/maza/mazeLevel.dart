@@ -128,7 +128,6 @@ class _MazeLevelState extends State<MazeLevel> {
                       onTap: (){
                         var row = index <= 1 ? mazeData[index]["rows"] : Random().nextInt(10) + 10;
                         var column = index <= 1 ? mazeData[index]["column"] : Random().nextInt(10) + 10;
-                        playAudio(clickAudio);
                         if(mController.checkLevel(index+1)) {
                           Get.to(() => const MazeGame(),
                               transition: Transition.rightToLeftWithFade,

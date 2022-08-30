@@ -11,26 +11,23 @@ class AudioPlayerClass {
   AudioPlayer bgPlayer = AudioPlayer();
   AudioPlayer cardFlipPlayer = AudioPlayer();
 
-  play(filename){
-    audioPlayer = AudioPlayer();
-    audioPlayer.setAsset(filename);
+  play(filename) async {
+    await audioPlayer.setAsset(filename);
     audioPlayer.play();
-    audioPlayer.loopMode;
-    Future.delayed(const Duration(seconds: 8),(){
-      audioPlayer.dispose();
-    });
+    // Future.delayed(const Duration(seconds: 8),(){
+    //   audioPlayer.dispose();
+    // });
   }
 
   playCardFlip(filename){
     cardFlipPlayer.setAsset(filename);
     cardFlipPlayer.play();
-    cardFlipPlayer.loopMode;
     // cardFlipPlayer.dispose();
   }
 
   playBg(filename){
     bgPlayer.setAsset(filename);
-    bgPlayer.setVolume(0.2);
+    bgPlayer.setVolume(0.3);
     bgPlayer.play();
     bgPlayer.setLoopMode(LoopMode.all);
   }

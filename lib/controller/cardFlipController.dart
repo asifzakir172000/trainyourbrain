@@ -36,6 +36,7 @@ class CardFlipController extends SuperController{
     start.value = true;
     Future.delayed(const Duration(seconds: 4), () {
       start.value = false;
+      AudioPlayerClass.instance.dismiss();
     });
   }
 
@@ -55,7 +56,6 @@ class CardFlipController extends SuperController{
       if (previousIndex != index) {
         if (data[previousIndex] !=
             data[index]) {
-          playAudio(clickAudio);
           wait.value = true;
           Future.delayed(
               const Duration(milliseconds: 200),
@@ -81,6 +81,7 @@ class CardFlipController extends SuperController{
           cardFlips[previousIndex] = false;
           cardFlips[index] = false;
           left = left - 1;
+          playAudio(wrongAudio);
           if (cardFlips
               .every((t) => t == false)) {
             Future.delayed(

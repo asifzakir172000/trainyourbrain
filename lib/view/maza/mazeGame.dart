@@ -1,3 +1,4 @@
+import 'package:circular_countdown_timer/circular_countdown_timer.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:lottie/lottie.dart';
@@ -38,7 +39,9 @@ class _MazeGameState extends State<MazeGame>{
                 children: [
                   Lottie.asset(mController.level.value == 5 ? rabbitFinishJson : rabbitAndCarrot),
                   Text(
-                    mController.isComplete.value ? "Congratulations You completed all level" :  "You win the Game!!\nCongratulations",
+                    mController.isComplete.value
+                        ? "Congratulations You completed all level"
+                        : mController.isRetry.value ? "Game Over!!\nYou lost the Game" : "You win the Game!!\nCongratulations",
                     textAlign: TextAlign.center,
                     style: const TextStyle(
                         fontSize: 40,
@@ -51,7 +54,7 @@ class _MazeGameState extends State<MazeGame>{
                   bottom: 20,
                   left: 0,
                   right: 0,
-                  child: mController.isComplete.value ? GestureDetector(
+                  child: mController.isComplete.value || mController.isRetry.value ? GestureDetector(
                     onTap: () {
                       mController.onRestartGame();
                     },
@@ -195,21 +198,51 @@ class _MazeGameState extends State<MazeGame>{
                     return mController.start.value ? TimeCountDown(
                       height: MediaQuery.of(context).size.height / 2,
                       width: MediaQuery.of(context).size.width / 2,
-                    ) : Padding(
-                      padding: const EdgeInsets.only(left: 10, right: 10, top: 10),
-                      child: Maze(
-                        height: MediaQuery.of(context).size.height * .8,
-                          player: MazeItem(
-                              rabbitImage,
-                              ImageType.asset),
-                          columns: mController.columns.value,
-                          rows: mController.rows.value,
-                          wallThickness: 4.0,
-                          wallColor: Colors.white,
-                          finish: MazeItem(
-                              mController.level.value == 5 ? riceCakeImage :carrotImage,
-                              ImageType.asset),
-                          onFinish: () => mController.onFinishGame()),
+                    ) : Column(
+                      children: [
+                        Padding(
+                          padding: const EdgeInsets.only(top: 10,),
+                          child: CircularCountDownTimer(
+                            width: 50,
+                            height: 50,
+                            duration: mController.timeLimits.value,
+                            fillColor: Colors.amber.shade400,
+                            ringColor: Colors.white,
+                            backgroundColor: Colors.amber.shade400,
+                            strokeWidth: 5.0,
+                            isReverse: true,
+                            strokeCap: StrokeCap.round,
+                            textFormat: CountdownTextFormat.S,
+                            isTimerTextShown: true,
+                            textStyle: const TextStyle(
+                                fontSize: 25,
+                                fontWeight: FontWeight.bold,
+                                color: Colors.white),
+                            onStart: () {
+
+                            },
+                            onComplete: () {
+                                mController.isFinish();
+                            },
+                          ),
+                        ),
+                        Padding(
+                          padding: const EdgeInsets.only(left: 10, right: 10,),
+                          child: Maze(
+                            height: MediaQuery.of(context).size.height * .8,
+                              player: MazeItem(
+                                  rabbitImage,
+                                  ImageType.asset),
+                              columns: mController.columns.value,
+                              rows: mController.rows.value,
+                              wallThickness: 4.0,
+                              wallColor: Colors.white,
+                              finish: MazeItem(
+                                  mController.level.value == 5 ? riceCakeImage :carrotImage,
+                                  ImageType.asset),
+                              onFinish: () => mController.onFinishGame()),
+                        ),
+                      ],
                     );
                   }),
                 ],

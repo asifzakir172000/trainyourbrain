@@ -130,7 +130,6 @@ class _FindNewLevelState extends State<FindNewLevel> {
                         }else if(index >= 4 ){
                           showCard = 3;
                         }
-                        playAudio(clickAudio);
                         if(mController.checkLevel(index+1)){
                           Get.to(() => const FindNewGame(), transition: Transition.rightToLeftWithFade, arguments: {
                             "num": num,

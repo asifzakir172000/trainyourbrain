@@ -56,6 +56,7 @@ class FindNewController extends SuperController{
     isFinished.value = false;
     Future.delayed(const Duration(seconds: 4), () {
       start.value = false;
+      AudioPlayerClass.instance.dismiss();
     });
   }
 

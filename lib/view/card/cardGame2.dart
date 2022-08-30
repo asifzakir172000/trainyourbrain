@@ -3,7 +3,6 @@ import 'package:flip_card/flip_card.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:lottie/lottie.dart';
-import 'package:percent_indicator/circular_percent_indicator.dart';
 import 'package:trainyourbrain/component/timeCountDown.dart';
 import 'package:trainyourbrain/controller/cardFlipController.dart';
 import 'package:trainyourbrain/controller/cardLevelController.dart';
@@ -54,80 +53,84 @@ class _FlipCardScreenState extends State<FlipCardTwoScreen> {
     return Obx((){
       return mController.isFinished.value
           ? Scaffold(
-        body: Center(
-          child: Stack(
-            children: [
-              SizedBox(
-                height: MediaQuery.of(context).size.height,
-                child: Lottie.asset(congrats),
-              ),
-              Align(
-                alignment: Alignment.center,
-                child: Text(
-                  mController.isComplete.value ? "Congratulations You completed all level" : "You win the Game!!\nCongratulations",
-                  textAlign: TextAlign.center,
-                  style: const TextStyle(
-                      fontSize: 40,
-                      fontWeight: FontWeight.w800,
-                      color: Colors.amber),
+        body: AnimatedOpacity(
+          opacity: 1.0,
+          duration: const Duration(milliseconds: 500),
+          child: Center(
+            child: Stack(
+              children: [
+                SizedBox(
+                  height: MediaQuery.of(context).size.height,
+                  child: Lottie.asset(congrats),
                 ),
-              ),
-              Positioned(
-                  bottom: 20,
-                  left: 0,
-                  right: 0,
-                  child: mController.isComplete.value ? GestureDetector(
-                    onTap: () {
-                      mController.restart();
-                    },
-                    child: Container(
-                      height: 50,
-                      width: MediaQuery.of(context).size.width / 2,
-                      alignment: Alignment.center,
-                      decoration: BoxDecoration(
-                        color: Colors.amber.shade300,
-                        borderRadius: BorderRadius.circular(13),
-                      ),
-                      margin: const EdgeInsets.only(right: 30, left: 30),
-                      child: const Icon(Icons.replay, color: Colors.white, size: 28,),
-                    ),
-                  ) :  Row(
-                mainAxisAlignment: MainAxisAlignment.spaceAround,
-                crossAxisAlignment: CrossAxisAlignment.center,
-                children: [
-                  GestureDetector(
-                    onTap: () {
-                      mController.restart();
-                    },
-                    child: Container(
-                      height: 50,
-                      width: 50,
-                      alignment: Alignment.center,
-                      decoration: BoxDecoration(
-                        color: Colors.amber.shade300,
-                        borderRadius: BorderRadius.circular(13),
-                      ),
-                      child: const Icon(Icons.replay, color: Colors.white, size: 28,),
-                    ),
+                Align(
+                  alignment: Alignment.center,
+                  child: Text(
+                    mController.isComplete.value ? "Congratulations You completed all level" : "You win the Game!!\nCongratulations",
+                    textAlign: TextAlign.center,
+                    style: const TextStyle(
+                        fontSize: 40,
+                        fontWeight: FontWeight.w800,
+                        color: Colors.amber),
                   ),
-                  GestureDetector(
-                    onTap: () {
-                      mController.nextLevel(mController.level.value);
-                    },
-                    child: Container(
-                      height: 50,
-                      width: MediaQuery.of(context).size.width * .5,
-                      alignment: Alignment.center,
-                      decoration: BoxDecoration(
-                        color: Colors.amber.shade300,
-                        borderRadius: BorderRadius.circular(13),
+                ),
+                Positioned(
+                    bottom: 20,
+                    left: 0,
+                    right: 0,
+                    child: mController.isComplete.value ? GestureDetector(
+                      onTap: () {
+                        mController.restart();
+                      },
+                      child: Container(
+                        height: 50,
+                        width: MediaQuery.of(context).size.width / 2,
+                        alignment: Alignment.center,
+                        decoration: BoxDecoration(
+                          color: Colors.amber.shade300,
+                          borderRadius: BorderRadius.circular(13),
+                        ),
+                        margin: const EdgeInsets.only(right: 30, left: 30),
+                        child: const Icon(Icons.replay, color: Colors.white, size: 28,),
                       ),
-                      child: const Icon(Icons.arrow_forward, color: Colors.white, size: 28,),
-                    ),
-                  ),
-                ],
-              )),
-            ],
+                    ) :  Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceAround,
+                      crossAxisAlignment: CrossAxisAlignment.center,
+                      children: [
+                        GestureDetector(
+                          onTap: () {
+                            mController.restart();
+                          },
+                          child: Container(
+                            height: 50,
+                            width: 50,
+                            alignment: Alignment.center,
+                            decoration: BoxDecoration(
+                              color: Colors.amber.shade300,
+                              borderRadius: BorderRadius.circular(13),
+                            ),
+                            child: const Icon(Icons.replay, color: Colors.white, size: 28,),
+                          ),
+                        ),
+                        GestureDetector(
+                          onTap: () {
+                            mController.nextLevel(mController.level.value);
+                          },
+                          child: Container(
+                            height: 50,
+                            width: MediaQuery.of(context).size.width * .5,
+                            alignment: Alignment.center,
+                            decoration: BoxDecoration(
+                              color: Colors.amber.shade300,
+                              borderRadius: BorderRadius.circular(13),
+                            ),
+                            child: const Icon(Icons.arrow_forward, color: Colors.white, size: 28,),
+                          ),
+                        ),
+                      ],
+                    )),
+              ],
+            ),
           ),
         ),
       )
