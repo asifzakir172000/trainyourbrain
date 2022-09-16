@@ -2,7 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:flutter_custom_clippers/flutter_custom_clippers.dart';
 import 'package:get/get.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:google_mobile_ads/google_mobile_ads.dart';
 import 'package:trainyourbrain/controller/findNewLevelController.dart';
+import 'package:trainyourbrain/helper/audioPlayer.dart';
 import 'package:trainyourbrain/helper/image.dart';
 import 'package:trainyourbrain/helper/storageKey.dart';
 import 'package:trainyourbrain/helper/utils.dart';
@@ -19,6 +21,30 @@ class FindNewLevel extends StatefulWidget {
 class _FindNewLevelState extends State<FindNewLevel> {
 
    FindNewLevelController mController = Get.put(FindNewLevelController());
+   late BannerAd _bannerAd;
+   String _isAdLoaded = "Loading";
+
+   _initAds(){
+     _bannerAd = BannerAd(
+         size: AdSize.banner,
+         adUnitId: "ca-app-pub-3940256099942544/6300978111",
+         listener: BannerAdListener(
+             onAdLoaded: (ad){
+               setState((){
+                 _isAdLoaded = "Complete";
+               });
+             },
+             onAdFailedToLoad: (ad, err){
+               setState((){
+                 _isAdLoaded = "Error";
+               });
+             }
+         ),
+         request: AdRequest()
+     );
+
+     _bannerAd.load();
+   }
 
    @override
    void initState() {
@@ -30,137 +56,157 @@ class _FindNewLevelState extends State<FindNewLevel> {
          mController.showCustomDialog(context);
        }
      });
-
+    _initAds();
    }
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      color: Colors.white,
-      child: Column(
-        children: [
-          Container(
-            height: MediaQuery.of(context).size.height/5,
-            color: Colors.white,
-            child:  ClipPath(
-              clipper: OvalBottomBorderClipper(),
-              child: Container(
-                color: Colors.amber.shade400,
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceAround,
-                  children: [
-                    GestureDetector(
-                      onTap: (){
-                        playAudio(beepAudio);
-                        Get.back();
-                      },
-                      child: Container(
-                        height: 50,
-                        width: 50,
-                        decoration: BoxDecoration(
-                            color: Colors.white,
-                            borderRadius: BorderRadius.circular(13),
-                            boxShadow: const[
-                              BoxShadow(
-                                  color: Colors.white,
-                                  offset: Offset(6, 6),
-                                  blurRadius: 35,
-                                  spreadRadius: 0.5),
-                            ]
+    return WillPopScope(
+      onWillPop: () async {
+        AudioPlayerClass.instance.restartBg();
+        return true;
+      },
+      child: Scaffold(
+        bottomNavigationBar: _isAdLoaded == "Complete" ? SizedBox(
+          height: _bannerAd.size.height.toDouble(),
+          width: _bannerAd.size.width.toDouble(),
+          child: AdWidget(
+            ad: _bannerAd,
+          ),
+        ) : SizedBox(
+          height: 40,
+          child: Center(
+            child: Text(_isAdLoaded=="Error" ? " " : "Ads Loading..."),
+          ),
+        ),
+        body: Container(
+          color: Colors.white,
+          child: Column(
+            children: [
+              Container(
+                height: MediaQuery.of(context).size.height/5,
+                color: Colors.white,
+                child:  ClipPath(
+                  clipper: OvalBottomBorderClipper(),
+                  child: Container(
+                    color: Colors.amber.shade400,
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceAround,
+                      children: [
+                        GestureDetector(
+                          onTap: (){
+                            AudioPlayerClass.instance.restartBg();
+                            Get.back();
+                          },
+                          child: Container(
+                            height: 50,
+                            width: 50,
+                            decoration: BoxDecoration(
+                                color: Colors.white,
+                                borderRadius: BorderRadius.circular(13),
+                                boxShadow: const[
+                                  BoxShadow(
+                                      color: Colors.white,
+                                      offset: Offset(6, 6),
+                                      blurRadius: 35,
+                                      spreadRadius: 0.5),
+                                ]
+                            ),
+                            child: Icon(Icons.home, color: Colors.amber,),
+                          ),
                         ),
-                        child: Icon(Icons.home, color: Colors.amber,),
-                      ),
-                    ),
-                    Text("Find a New Card", style: GoogleFonts.ubuntu(
-                        color: Colors.white,
-                        fontSize: 30,
-                        fontWeight: FontWeight.w600,
-                        decoration: TextDecoration.none
-                    ),),
-                    GestureDetector(
-                      onTap: (){
-                        playAudio(beepAudio);
-                        mController.showCustomDialog(context);
-                      },
-                      child: Container(
-                        height: 50,
-                        width: 50,
-                        decoration: BoxDecoration(
+                        Text("Find a New Card", style: GoogleFonts.ubuntu(
                             color: Colors.white,
-                            borderRadius: BorderRadius.circular(13),
-                            boxShadow: const[
-                              BoxShadow(
-                                  color: Colors.white,
-                                  offset: Offset(6, 6),
-                                  blurRadius: 35,
-                                  spreadRadius: 0.5),
-                            ]
+                            fontSize: 30,
+                            fontWeight: FontWeight.w600,
+                            decoration: TextDecoration.none
+                        ),),
+                        GestureDetector(
+                          onTap: (){
+
+                            mController.showCustomDialog(context);
+                          },
+                          child: Container(
+                            height: 50,
+                            width: 50,
+                            decoration: BoxDecoration(
+                                color: Colors.white,
+                                borderRadius: BorderRadius.circular(13),
+                                boxShadow: const[
+                                  BoxShadow(
+                                      color: Colors.white,
+                                      offset: Offset(6, 6),
+                                      blurRadius: 35,
+                                      spreadRadius: 0.5),
+                                ]
+                            ),
+                            child: const Icon(Icons.question_mark, color: Colors.amber,),
+                          ),
                         ),
-                        child: const Icon(Icons.question_mark, color: Colors.amber,),
-                      ),
+                      ],
                     ),
-                  ],
+                  ),
                 ),
               ),
-            ),
-          ),
-          Column(
-            children: [
-              SizedBox(
-                height: MediaQuery.of(context).size.width * .05,
-              ),
-              Obx((){
-                debugPrint(mController.level.value.toString());
-                return GridView.builder(
-                  padding:  const EdgeInsets.all(10),
-                  shrinkWrap: true,
-                  gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-                      crossAxisCount: 4,
-                      crossAxisSpacing: 4.0,
-                      mainAxisSpacing: 4.0
+              Column(
+                children: [
+                  SizedBox(
+                    height: MediaQuery.of(context).size.width * .05,
                   ),
-                  itemCount: 5,
-                  itemBuilder: (BuildContext context, int index){
-                    return GestureDetector(
-                      onTap: (){
-                        var num = index >= 2 ? 3 : 2;
-                        var showCard = 1;
-                        if(index >= 2 && index <= 3){
-                          showCard = 2;
-                        }else if(index >= 4 ){
-                          showCard = 3;
-                        }
-                        if(mController.checkLevel(index+1)){
-                          Get.to(() => const FindNewGame(), transition: Transition.rightToLeftWithFade, arguments: {
-                            "num": num,
-                            "showCard": showCard,
-                            "level": index + 1
-                          },);
-                        }
-                      },
-                      child: Card(
-                        elevation: 2,
-                        shadowColor: Colors.grey,
-                        shape: RoundedRectangleBorder(
-                          side: BorderSide(
-                            color: mController.level.value > index ? Colors.green : Colors.amber, //<-- SEE HERE
-                          ),
-                          borderRadius: BorderRadius.circular(20.0),
-                        ),
-                        color: mController.level.value > index ? Colors.lightGreen.shade100 : Colors.amber.shade300,
-                        child: Center(child: Text("${index + 1}", style: GoogleFonts.ubuntu(
-                            color: Colors.white,
-                            fontSize: 24
-                        ),),),
+                  Obx((){
+                    debugPrint(mController.level.value.toString());
+                    return GridView.builder(
+                      padding:  const EdgeInsets.all(10),
+                      shrinkWrap: true,
+                      gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+                          crossAxisCount: 4,
+                          crossAxisSpacing: 4.0,
+                          mainAxisSpacing: 4.0
                       ),
+                      itemCount: 5,
+                      itemBuilder: (BuildContext context, int index){
+                        return GestureDetector(
+                          onTap: (){
+                            var num = index >= 2 ? 3 : 2;
+                            var showCard = 1;
+                            if(index >= 2 && index <= 3){
+                              showCard = 2;
+                            }else if(index >= 4 ){
+                              showCard = 3;
+                            }
+                            if(mController.checkLevel(index+1)){
+                              Get.to(() => const FindNewGame(), transition: Transition.rightToLeftWithFade, arguments: {
+                                "num": num,
+                                "showCard": showCard,
+                                "level": index + 1
+                              },);
+                            }
+                          },
+                          child: Card(
+                            elevation: 2,
+                            shadowColor: Colors.grey,
+                            shape: RoundedRectangleBorder(
+                              side: BorderSide(
+                                color: mController.level.value > index ? Colors.green : Colors.amber, //<-- SEE HERE
+                              ),
+                              borderRadius: BorderRadius.circular(20.0),
+                            ),
+                            color: mController.level.value > index ? Colors.lightGreen.shade100 : Colors.amber.shade300,
+                            child: Center(child: Text("${index + 1}", style: GoogleFonts.ubuntu(
+                                color: Colors.white,
+                                fontSize: 24
+                            ),),),
+                          ),
+                        );
+                      },
                     );
-                  },
-                );
-              }),
+                  }),
+                ],
+              ),
+              const Spacer(),
             ],
           ),
-          const Spacer(),
-        ],
+        ),
       ),
     );
   }

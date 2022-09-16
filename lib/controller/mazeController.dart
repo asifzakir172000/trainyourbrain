@@ -11,7 +11,7 @@ import 'package:trainyourbrain/helper/storageKey.dart';
 import 'package:trainyourbrain/model/homeData.dart';
 import 'package:trainyourbrain/view/maza/mazeData.dart';
 
-class MazeController extends SuperController{
+class MazeController extends GetxController{
 
   var rows = 12.obs;
   var columns = 3.obs;
@@ -88,30 +88,6 @@ class MazeController extends SuperController{
     super.onInit();
   }
 
-  @override
-  void onDetached() {
 
-  }
-
-  @override
-  void onInactive() {
-
-  }
-
-  @override
-  void onPaused() {
-    AudioPlayerClass.instance.dismissBgPlayer();
-  }
-
-  @override
-  void onResumed() {
-    AudioPlayerClass.instance.restartBg();
-  }
-
-  @override
-  void dispose() {
-    AudioPlayerClass.instance.dismiss();
-    super.dispose();
-  }
 
 }

@@ -12,7 +12,7 @@ import 'package:trainyourbrain/model/wordCOlorModel.dart';
 import 'package:trainyourbrain/model/wordColorOptionalModel.dart';
 import 'package:trainyourbrain/view/wordColor/wordColorData.dart';
 
-class WordColorController extends SuperController{
+class WordColorController extends GetxController{
 
   var questionText = "".obs;
   var answer = "".obs;
@@ -128,29 +128,4 @@ class WordColorController extends SuperController{
     super.onInit();
   }
 
-  @override
-  void onDetached() {
-
-  }
-
-  @override
-  void onInactive() {
-
-  }
-
-  @override
-  void onPaused() {
-    AudioPlayerClass.instance.dismissBgPlayer();
-  }
-
-  @override
-  void onResumed() {
-    AudioPlayerClass.instance.restartBg();
-  }
-
-  @override
-  void dispose() {
-    AudioPlayerClass.instance.dismiss();
-    super.dispose();
-  }
 }

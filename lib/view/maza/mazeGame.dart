@@ -8,7 +8,6 @@ import 'package:trainyourbrain/controller/findPathLevelController.dart';
 import 'package:trainyourbrain/controller/mazeController.dart';
 import 'package:trainyourbrain/helper/audioPlayer.dart';
 import 'package:trainyourbrain/helper/image.dart';
-import 'package:trainyourbrain/model/homeData.dart';
 
 class MazeGame extends StatefulWidget {
   const MazeGame({Key? key}) : super(key: key);
@@ -127,7 +126,7 @@ class _MazeGameState extends State<MazeGame>{
                     children: [
                       GestureDetector(
                         onTap: (){
-                          AudioPlayerClass.instance.play(beepAudio);
+                          Get.back();
                           Get.back();
                         },
                         child: Container(
@@ -171,7 +170,7 @@ class _MazeGameState extends State<MazeGame>{
                           padding: const EdgeInsets.only(top: 10, right: 10),
                         child: GestureDetector(
                           onTap: (){
-                            playAudio(beepAudio);
+
                             Get.find<FindPathLevelController>().showCustomDialog(context);
                           },
                           child: Container(

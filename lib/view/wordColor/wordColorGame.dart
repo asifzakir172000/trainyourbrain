@@ -8,7 +8,6 @@ import 'package:trainyourbrain/controller/wordColorController.dart';
 import 'package:trainyourbrain/controller/wordColorLevelController.dart';
 import 'package:trainyourbrain/helper/audioPlayer.dart';
 import 'package:trainyourbrain/helper/image.dart';
-import 'package:trainyourbrain/model/homeData.dart';
 
 class WordColorGame extends StatefulWidget {
   const WordColorGame({Key? key}) : super(key: key);
@@ -140,7 +139,6 @@ class _WordColorGameState extends State<WordColorGame> {
                 children: [
                   GestureDetector(
                     onTap: (){
-                      AudioPlayerClass.instance.play(beepAudio);
                       Get.back();
                     },
                     child: Container(
@@ -182,7 +180,7 @@ class _WordColorGameState extends State<WordColorGame> {
                   ),
                   Padding(padding: const EdgeInsets.only(top: 10, left: 10, ), child: GestureDetector(
                     onTap: (){
-                      playAudio(beepAudio);
+
                       Get.find<WordColorLevelController>().showCustomDialog(context);
                     },
                     child: Container(

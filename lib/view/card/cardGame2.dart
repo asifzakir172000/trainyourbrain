@@ -1,4 +1,3 @@
-import 'package:circular_countdown_timer/circular_countdown_timer.dart';
 import 'package:flip_card/flip_card.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -23,27 +22,30 @@ class _FlipCardScreenState extends State<FlipCardTwoScreen> {
   CardFlipController mController = Get.put(CardFlipController());
 
   Widget getItem(int index) {
-    return Container(
-      decoration: BoxDecoration(
-          color: Colors.white,
-          boxShadow: const [
-             BoxShadow(
-              color: Colors.black45,
-              blurRadius: 3,
-              spreadRadius: 0.8,
-              offset: Offset(2.0, 1),
-            )
+    return Padding(
+      padding: const EdgeInsets.all(10.0),
+      child: Container(
+        decoration: BoxDecoration(
+            color: Colors.white,
+            boxShadow: const [
+               BoxShadow(
+                color: Colors.black45,
+                blurRadius: 3,
+                spreadRadius: 0.8,
+                offset: Offset(2.0, 1),
+              )
+            ],
+            borderRadius: BorderRadius.circular(5)),
+        margin: const EdgeInsets.all(4.0),
+        child: Stack(
+          children: [
+            Padding(
+              padding: const EdgeInsets.all(10.0),
+              child: Image.asset(mController.data[index]),
+            ),
+            Obx(() => Visibility(visible: !mController.cardFlips[index], child: Image.asset(checkMarkImage),),)
           ],
-          borderRadius: BorderRadius.circular(5)),
-      margin: const EdgeInsets.all(4.0),
-      child: Stack(
-        children: [
-          Padding(
-            padding: const EdgeInsets.all(10.0),
-            child: Image.asset(mController.data[index]),
-          ),
-          Obx(() => Visibility(visible: !mController.cardFlips[index], child: Image.asset(checkMarkImage),),)
-        ],
+        ),
       ),
     );
   }
@@ -66,7 +68,7 @@ class _FlipCardScreenState extends State<FlipCardTwoScreen> {
                 Align(
                   alignment: Alignment.center,
                   child: Text(
-                    mController.isComplete.value ? "Congratulations You completed all level" : "You win the Game!!\nCongratulations",
+                    mController.isComplete.value ? "Congratulations You completed all level" : "You Won the Game!!\nCongratulations",
                     textAlign: TextAlign.center,
                     style: const TextStyle(
                         fontSize: 40,
@@ -152,7 +154,6 @@ class _FlipCardScreenState extends State<FlipCardTwoScreen> {
                     children: [
                       GestureDetector(
                         onTap: (){
-                          AudioPlayerClass.instance.play(beepAudio);
                           Get.back();
                         },
                         child: Container(
@@ -198,7 +199,6 @@ class _FlipCardScreenState extends State<FlipCardTwoScreen> {
                             ? const TimeCountDown()
                             : GestureDetector(
                           onTap: (){
-                            playAudio(beepAudio);
                             Get.find<CardLevelController>().showCustomDialog(context);
                           },
                           child: Container(
@@ -221,60 +221,94 @@ class _FlipCardScreenState extends State<FlipCardTwoScreen> {
                       ),
                     ],
                   ),),
+
                   Obx((){
                     return !mController.start.value
-                        ? Padding(
-                      padding: const EdgeInsets.only(top:40, left: 20, right: 20, bottom: 20),
+                        ? Column(
+                          children: [
+                            TweenAnimationBuilder<Duration>(
+                                duration: const Duration(minutes: 15),
+                                tween: Tween(begin: Duration.zero, end: const Duration(minutes: 15)),
+                                builder: (BuildContext context, Duration value, Widget? child) {
+                                  final minutes = value.inMinutes <= 9 ? "0${value.inMinutes}" : "${value.inMinutes}";
+                                  final  seconds = (value.inSeconds % 60) <= 9 ? "0${value.inSeconds % 60}" : "${value.inSeconds % 60}";
+                                  return Padding(
+                                    padding: const EdgeInsets.symmetric(vertical: 5),
+                                    child: Text(
+                                      '$minutes:$seconds',
+                                      textAlign: TextAlign.center,
+                                      style: const TextStyle(
+                                          color: Colors.white,
+                                          fontWeight: FontWeight.bold,
+                                          fontSize: 30),),);
+                                }),
+                            Padding(
+                      padding: const EdgeInsets.only(top:20, left: 20, right: 20, bottom: 20),
                       child: GridView.builder(
-                        shrinkWrap: true,
-                        physics: const NeverScrollableScrollPhysics(),
-                        gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-                          crossAxisCount: 2,
-                        ),
-                        itemBuilder: (context, index) => FlipCard(
-                            key: mController.cardStateKeys[index],
-                            onFlip: () {
-                              mController.onFlip(index);
-                            },
-                            speed: 100,
-                            flipOnTouch: mController.wait.value ? false : mController.cardFlips[index],
-                            direction: FlipDirection.HORIZONTAL,
-                            front: Container(
-                              decoration: BoxDecoration(
-                                  color: Colors.white,
-                                  borderRadius: BorderRadius.circular(5),
-                                  boxShadow: const [
-                                    BoxShadow(
-                                      color: Colors.grey,
-                                      blurRadius: 3,
-                                      spreadRadius: 0.8,
-                                      offset: Offset(2.0, 1),
-                                    )
-                                  ]),
-                              margin: const EdgeInsets.all(4.0),
-                              child: Padding(
-                                padding: const EdgeInsets.all(8.0),
-                                child: Image.asset(
-                                  questionMarkImage,
-                                  fit: BoxFit.fill,
-                                ),
-                              ),
+                            shrinkWrap: true,
+                            physics: const NeverScrollableScrollPhysics(),
+                            gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+                              crossAxisCount: 2,
                             ),
-                            back: getItem(index)),
-                        itemCount: mController.data.length,
+                            itemBuilder: (context, index) => FlipCard(
+                                key: mController.cardStateKeys[index],
+                                onFlip: () {
+                                  /*if(mController.cardFlips[index]){
+
+                                  }*/
+                                  mController.onFlip(index);
+                                },
+                                speed: 100,
+                                flipOnTouch: mController.cardFlips[index],
+                                direction: FlipDirection.HORIZONTAL,
+                                front: Padding(
+                                  padding: const EdgeInsets.all(10.0),
+                                  child: Container(
+                                    decoration: BoxDecoration(
+                                        color: Colors.white,
+                                        borderRadius: BorderRadius.circular(5),
+                                        boxShadow: const [
+                                          BoxShadow(
+                                            color: Colors.grey,
+                                            blurRadius: 3,
+                                            spreadRadius: 0.8,
+                                            offset: Offset(2.0, 1),
+                                          )
+                                        ]),
+                                    margin: const EdgeInsets.only(left: 4.0, right: 4.0, top: 4.0, bottom: 4.0),
+                                    child: Padding(
+                                      padding: const EdgeInsets.all(8.0),
+                                      child: Image.asset(
+                                        questionMarkImage,
+                                        fit: BoxFit.fill,
+                                      ),
+                                    ),
+                                  ),
+                                ),
+                                back: getItem(index)),
+                            itemCount: mController.data.length,
                       ),
-                    ) : Padding(
+                    ),
+                          ],
+                        ) : Column(
+                          children: [
+                            const SizedBox(
+                              height: 20,
+                            ),
+                            Padding(
                       padding: const EdgeInsets.only(top:40, left: 20, right: 20, bottom: 20),
                       child: GridView.builder(
-                        shrinkWrap: true,
-                        physics: const NeverScrollableScrollPhysics(),
-                        gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-                          crossAxisCount: 2,
-                        ),
-                        itemBuilder: (context, index) => getItem(index),
-                        itemCount: mController.data.length,
+                            shrinkWrap: true,
+                            physics: const NeverScrollableScrollPhysics(),
+                            gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+                              crossAxisCount: 2,
+                            ),
+                            itemBuilder: (context, index) => getItem(index),
+                            itemCount: mController.data.length,
                       ),
-                    );
+                    ),
+                          ],
+                        );
                     }),
                 ],
               ),

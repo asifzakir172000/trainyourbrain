@@ -27,7 +27,7 @@ class HomeController extends SuperController{
 
   @override
   void onDetached() {
-
+    AudioPlayerClass.instance.dismissBgPlayer();
   }
 
   @override
@@ -37,12 +37,12 @@ class HomeController extends SuperController{
 
   @override
   void onPaused() {
-    AudioPlayerClass.instance.dismissBgPlayer();
+    // AudioPlayerClass.instance.dismissBgPlayer();
   }
 
   @override
   void onResumed() {
-    AudioPlayerClass.instance.restartBg();
+    AudioPlayerClass.instance.dismissBgPlayer();
   }
 
 }

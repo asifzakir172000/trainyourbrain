@@ -21,7 +21,7 @@ class TimeCountDown extends StatelessWidget {
       child: CircularCountDownTimer(
         width: width,
         height: height,
-        duration: 4,
+        duration: 3,
         fillColor: Colors.amber,
         ringColor: Colors.white,
         backgroundColor: Colors.amber,

@@ -1,4 +1,4 @@
-package com.example.trainyourbrain
+package com.aiolos.solutions.brainteasers
 
 import io.flutter.embedding.android.FlutterActivity
 

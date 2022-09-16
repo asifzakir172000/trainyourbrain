@@ -13,7 +13,7 @@ import 'package:trainyourbrain/helper/storageKey.dart';
 import 'package:trainyourbrain/model/homeData.dart';
 import 'package:trainyourbrain/view/findNew/findNewData.dart';
 
-class FindNewController extends SuperController{
+class FindNewController extends GetxController{
 
   var start = true.obs;
   var left = 3.obs;
@@ -123,30 +123,5 @@ class FindNewController extends SuperController{
     super.onInit();
   }
 
-  @override
-  void dispose() {
-    AudioPlayerClass.instance.dismiss();
-    super.dispose();
-  }
-
-  @override
-  void onDetached() {
-
-  }
-
-  @override
-  void onInactive() {
-
-  }
-
-  @override
-  void onPaused() {
-    AudioPlayerClass.instance.dismissBgPlayer();
-  }
-
-  @override
-  void onResumed() {
-    AudioPlayerClass.instance.restartBg();
-  }
 
 }

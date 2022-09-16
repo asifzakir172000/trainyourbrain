@@ -1,4 +1,3 @@
-
 import 'dart:async';
 
 import 'package:flip_card/flip_card.dart';
@@ -12,7 +11,7 @@ import 'package:trainyourbrain/helper/storageKey.dart';
 import 'package:trainyourbrain/model/homeData.dart';
 import 'package:trainyourbrain/view/card/cardData.dart';
 
-class CardFlipController extends SuperController{
+class CardFlipController extends GetxController{
   var previousIndex = -1.obs;
   var flip = false.obs;
   var start = true.obs;
@@ -34,9 +33,9 @@ class CardFlipController extends SuperController{
     left.value = (data.length ~/ 2);
     isFinished.value = false;
     start.value = true;
-    Future.delayed(const Duration(seconds: 4), () {
-      start.value = false;
+    Future.delayed(const Duration(seconds: 3), () {
       AudioPlayerClass.instance.dismiss();
+      start.value = false;
     });
   }
 
@@ -76,7 +75,7 @@ class CardFlipController extends SuperController{
                           wait.value = false;
                     });
               });
-          // playAudio(beepAudio);
+          //
         } else {
           cardFlips[previousIndex] = false;
           cardFlips[index] = false;
@@ -84,17 +83,17 @@ class CardFlipController extends SuperController{
           playAudio(wrongAudio);
           if (cardFlips
               .every((t) => t == false)) {
+            var levelP = StorageKey.instance.getStorage(key: StorageKey.cop)??0;
+            if(levelP < level.value){
+              StorageKey.instance.setStorage(key: StorageKey.cop, msg: level.value);
+              var per = StorageKey.instance.getStorage(key: StorageKey.reasoningPer)??0.0;
+              StorageKey.instance.setStorage(key: StorageKey.reasoningPer, msg: per + 1);
+              Get.find<CardLevelController>().getLevel();
+              Get.find<HomeController>().setData();
+            }
             Future.delayed(
-                const Duration(milliseconds: 160),
+                const Duration(seconds: 1),
                     () {
-                      var levelP = StorageKey.instance.getStorage(key: StorageKey.cop)??0;
-                      if(levelP < level.value){
-                        StorageKey.instance.setStorage(key: StorageKey.cop, msg: level.value);
-                        var per = StorageKey.instance.getStorage(key: StorageKey.reasoningPer)??0.0;
-                        StorageKey.instance.setStorage(key: StorageKey.reasoningPer, msg: per + 1);
-                        Get.find<CardLevelController>().getLevel();
-                        Get.find<HomeController>().setData();
-                      }
                       isFinished.value = true;
                       start.value = false;
                       if(level.value == 5){
@@ -116,30 +115,6 @@ class CardFlipController extends SuperController{
     super.onInit();
   }
 
-  @override
-  void dispose() {
-    AudioPlayerClass.instance.dismiss();
-    super.dispose();
-  }
 
-  @override
-  void onDetached() {
-
-  }
-
-  @override
-  void onInactive() {
-
-  }
-
-  @override
-  void onPaused() {
-    AudioPlayerClass.instance.dismissBgPlayer();
-  }
-
-  @override
-  void onResumed() {
-    AudioPlayerClass.instance.restartBg();
-  }
 
 }

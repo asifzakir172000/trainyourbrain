@@ -14,9 +14,6 @@ class AudioPlayerClass {
   play(filename) async {
     await audioPlayer.setAsset(filename);
     audioPlayer.play();
-    // Future.delayed(const Duration(seconds: 8),(){
-    //   audioPlayer.dispose();
-    // });
   }
 
   playCardFlip(filename){
@@ -25,11 +22,16 @@ class AudioPlayerClass {
     // cardFlipPlayer.dispose();
   }
 
-  playBg(filename){
+  playBg(filename, low){
+    bgPlayer = AudioPlayer();
     bgPlayer.setAsset(filename);
-    bgPlayer.setVolume(0.3);
     bgPlayer.play();
     bgPlayer.setLoopMode(LoopMode.all);
+    if(low){
+      bgPlayer.setVolume(0.2);
+    }else{
+      bgPlayer.setVolume(0.3);
+    }
   }
 
   dismiss(){

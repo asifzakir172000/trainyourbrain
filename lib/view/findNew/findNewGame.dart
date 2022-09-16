@@ -1,4 +1,3 @@
-import 'package:circular_countdown_timer/circular_countdown_timer.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:lottie/lottie.dart';
@@ -7,7 +6,6 @@ import 'package:trainyourbrain/controller/findNewController.dart';
 import 'package:trainyourbrain/controller/findNewLevelController.dart';
 import 'package:trainyourbrain/helper/audioPlayer.dart';
 import 'package:trainyourbrain/helper/image.dart';
-import 'package:trainyourbrain/model/homeData.dart';
 
 class FindNewGame extends StatefulWidget {
   const FindNewGame({Key? key}) : super(key: key);
@@ -21,54 +19,60 @@ class _FindNewGameState extends State<FindNewGame> {
   FindNewController mController = Get.put(FindNewController());
 
   Widget getItem(int index) {
-    return Container(
-      decoration: BoxDecoration(
-          color: Colors.white,
-          boxShadow: const [
-            BoxShadow(
-              color: Colors.black45,
-              blurRadius: 3,
-              spreadRadius: 0.8,
-              offset: Offset(2.0, 1),
-            )
-          ],
-          borderRadius: BorderRadius.circular(5)),
+    return Padding(
       padding: const EdgeInsets.all(10.0),
-      margin: const EdgeInsets.all(4.0),
-      child: Image.asset(mController.data[index]),
+      child: Container(
+        decoration: BoxDecoration(
+            color: Colors.white,
+            boxShadow: const [
+              BoxShadow(
+                color: Colors.black45,
+                blurRadius: 3,
+                spreadRadius: 0.8,
+                offset: Offset(2.0, 1),
+              )
+            ],
+            borderRadius: BorderRadius.circular(5)),
+        padding: const EdgeInsets.all(10.0),
+        margin: const EdgeInsets.all(4.0),
+        child: Image.asset(mController.data[index]),
+      ),
     );
   }
 
   Widget getShowItem(int index) {
     return Obx(()=>GestureDetector(
       onTap: () => mController.onNewItemCheck(index),
-      child: Container(
-        decoration: BoxDecoration(
-          color: Colors.white,
-          boxShadow: const [
-            BoxShadow(
-              color: Colors.black45,
-              blurRadius: 3,
-              spreadRadius: 0.8,
-              offset: Offset(2.0, 1),
-            )
-          ],
-          borderRadius: BorderRadius.circular(5),
-          border: Border.all(
-              color: mController.isSelected[index] ? Colors.lightGreen : Colors.white,
-              width: 3.0
-          ),
-        ),
-        margin: const EdgeInsets.all(4.0),
-        child: Stack(
-          children: [
-            Padding(
-              padding: const EdgeInsets.all(10.0),
-              child: Image.asset(mController.showData[index]),
+      child: Padding(
+        padding: const EdgeInsets.all(10.0),
+        child: Container(
+          decoration: BoxDecoration(
+            color: Colors.white,
+            boxShadow: const [
+              BoxShadow(
+                color: Colors.black45,
+                blurRadius: 3,
+                spreadRadius: 0.8,
+                offset: Offset(2.0, 1),
+              )
+            ],
+            borderRadius: BorderRadius.circular(5),
+            border: Border.all(
+                color: mController.isSelected[index] ? Colors.lightGreen : Colors.white,
+                width: 3.0
             ),
-            Obx(() => Visibility(visible: mController.inCorrectIndex.contains(index), child: Image.asset(crossMarkImage),),),
-            Obx(() => Visibility(visible: mController.correctIndex.contains(index), child: Image.asset(checkMarkImage),),)
-          ],
+          ),
+          margin: const EdgeInsets.all(4.0),
+          child: Stack(
+            children: [
+              Padding(
+                padding: const EdgeInsets.all(10.0),
+                child: Image.asset(mController.showData[index]),
+              ),
+              Obx(() => Visibility(visible: mController.inCorrectIndex.contains(index), child: Image.asset(crossMarkImage),),),
+              Obx(() => Visibility(visible: mController.correctIndex.contains(index), child: Image.asset(checkMarkImage),),)
+            ],
+          ),
         ),
       ),
     ));
@@ -174,7 +178,6 @@ class _FindNewGameState extends State<FindNewGame> {
                     children: [
                       GestureDetector(
                         onTap: (){
-                          AudioPlayerClass.instance.play(beepAudio);
                           Get.back();
                         },
                         child: Container(
@@ -220,7 +223,6 @@ class _FindNewGameState extends State<FindNewGame> {
                             ? const TimeCountDown()
                             : GestureDetector(
                           onTap: (){
-                            playAudio(beepAudio);
                             Get.find<FindNewLevelController>().showCustomDialog(context);
                           },
                           child: Container(
