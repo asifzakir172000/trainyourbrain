@@ -6,7 +6,9 @@ import 'package:get/get.dart';
 import 'package:new_version/new_version.dart';
 import 'package:trainyourbrain/helper/audioPlayer.dart';
 import 'package:trainyourbrain/helper/image.dart';
+import 'package:trainyourbrain/helper/storageKey.dart';
 import 'package:trainyourbrain/view/home.dart';
+import 'package:trainyourbrain/view/login/login.dart';
 
 class SplashScreenController extends SuperController{
 
@@ -51,7 +53,7 @@ class SplashScreenController extends SuperController{
         dismissButtonText: "Skip",
         dialogText: "Please update the app from " + "${status.localVersion}" + " to " + "${status.storeVersion}",
         dismissAction: () {
-          Get.offAll(()=>const HomePage(), transition: Transition.rightToLeftWithFade,);
+          navigate();
         },
         updateButtonText: "Lets update",
       );
@@ -59,7 +61,16 @@ class SplashScreenController extends SuperController{
       print("DEVICE : " + status.localVersion);
       print("STORE : " + status.storeVersion);
     }else{
+      navigate();
+    }
+  }
+
+  navigate(){
+    var isLogin = StorageKey.instance.getStorage(key: StorageKey.isLogin) ?? false;
+    if(isLogin){
       Get.offAll(()=>const HomePage(), transition: Transition.rightToLeftWithFade,);
+    }else{
+      Get.offAll(()=>const LoginScreen(), transition: Transition.rightToLeftWithFade,);
     }
   }
 

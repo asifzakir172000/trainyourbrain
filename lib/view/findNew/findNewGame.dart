@@ -178,6 +178,7 @@ class _FindNewGameState extends State<FindNewGame> {
                     children: [
                       GestureDetector(
                         onTap: (){
+                          AudioPlayerClass.instance.dismiss();
                           Get.back();
                         },
                         child: Container(

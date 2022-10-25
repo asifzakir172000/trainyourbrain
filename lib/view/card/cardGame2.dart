@@ -154,6 +154,7 @@ class _FlipCardScreenState extends State<FlipCardTwoScreen> {
                     children: [
                       GestureDetector(
                         onTap: (){
+                          AudioPlayerClass.instance.dismiss();
                           Get.back();
                         },
                         child: Container(

@@ -126,7 +126,7 @@ class _MazeGameState extends State<MazeGame>{
                     children: [
                       GestureDetector(
                         onTap: (){
-                          Get.back();
+                          AudioPlayerClass.instance.dismiss();
                           Get.back();
                         },
                         child: Container(

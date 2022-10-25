@@ -179,11 +179,14 @@ class _CardLevelState extends State<CardLevel> {
                             shadowColor: Colors.grey,
                             shape: RoundedRectangleBorder(
                               side: BorderSide(
-                                color: mController.level.value > index ? Colors.green : Colors.amber, //<-- SEE HERE
+                                color: mController.level.value > index ? Colors.green :
+                                mController.level.value == index ? Colors.amber : Colors.grey, //<-- SEE HERE
                               ),
                               borderRadius: BorderRadius.circular(20.0),
                             ),
-                            color: mController.level.value > index ? Colors.lightGreen.shade100 : Colors.amber.shade300,
+                            color: mController.level.value > index ?
+                            Colors.lightGreen.shade100 :
+                            mController.level.value == index ? Colors.amber.shade300 : Colors.grey.shade300,
                             child: Center(child: Text("${index + 1}", style: GoogleFonts.ubuntu(
                                 color: Colors.white,
                                 fontSize: 24

@@ -36,7 +36,7 @@ class _HomePageState extends State<HomePage> {
           alignment: Alignment.center,
           child: Text(
             "Coming\nSoon",
-            textAlign: TextAlign.justify,
+            textAlign: TextAlign.center,
             style: GoogleFonts.ubuntu(
                 color: Colors.black,
                 fontSize: 18,

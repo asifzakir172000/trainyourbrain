@@ -139,6 +139,7 @@ class _WordColorGameState extends State<WordColorGame> {
                 children: [
                   GestureDetector(
                     onTap: (){
+                      AudioPlayerClass.instance.dismiss();
                       Get.back();
                     },
                     child: Container(

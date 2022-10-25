@@ -11,7 +11,7 @@ List<Map<String, dynamic>> reasoningData = [
     "image": cardImage,
     "onTap": () {
       AudioPlayerClass.instance.dismissBgPlayer();
-      playAudio(clickAudio);
+      // playAudio(clickAudio);
       Get.to(() => const CardLevel(), transition: Transition.rightToLeftWithFade);
     },
   },
@@ -19,7 +19,7 @@ List<Map<String, dynamic>> reasoningData = [
     "image": magnifyingGlass,
     "onTap": (){
       AudioPlayerClass.instance.dismissBgPlayer();
-      playAudio(clickAudio);
+      // playAudio(clickAudio);
       Get.to(() => const FindNewLevel(), transition: Transition.rightToLeftWithFade);
     },
   },
@@ -27,7 +27,7 @@ List<Map<String, dynamic>> reasoningData = [
     "image": mazeHomeImage,
     "onTap": (){
       AudioPlayerClass.instance.dismissBgPlayer();
-      playAudio(clickAudio);
+      // playAudio(clickAudio);
       Get.to(() => const MazeLevel(), transition: Transition.rightToLeftWithFade);
     },
   },
@@ -38,14 +38,14 @@ List<Map<String, dynamic>> attention = [
     "image": wordColorGame,
     "onTap": (){
       AudioPlayerClass.instance.dismissBgPlayer();
-      playAudio(clickAudio);
+      // playAudio(clickAudio);
       Get.to(() => const WordColorLevel(), transition: Transition.rightToLeftWithFade);
     },
   },
   {
     "image": "Coming Soon",
     "onTap": (){
-      // AudioPlayerClass.instance.dismissBgPlayer();
+      AudioPlayerClass.instance.dismissBgPlayer();
       // playAudio(clickAudio);
       // Get.to(() => const WordColorLevel(), transition: Transition.rightToLeftWithFade);
     },
@@ -53,7 +53,7 @@ List<Map<String, dynamic>> attention = [
   {
     "image": "Coming Soon",
     "onTap": (){
-      // AudioPlayerClass.instance.dismissBgPlayer();
+      AudioPlayerClass.instance.dismissBgPlayer();
       // playAudio(clickAudio);
       // Get.to(() => const WordColorLevel(), transition: Transition.rightToLeftWithFade);
     },

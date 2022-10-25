@@ -17,6 +17,7 @@ class StorageKey {
   static const wordColorFirst = "wordColorFirst";
   static const reasoningPer = "reasoningPer";
   static const attentionPer = "attentionPer";
+  static const isLogin = "login";
 
 
   setStorage({key, msg}){
